@@ -1,0 +1,43 @@
+@import 'tailwindcss';
+
+@theme {
+	--font-manrope: 'Manrope', sans-serif;
+	/* Background Utama (Sidebar) */
+	--color-artisan-sidebar: #e2e4d8;
+
+	/* Background Halaman Utama */
+	--color-artisan-bg: #f9f9f7;
+
+	/* untuk button */
+	--color-artisan-primary: #5f5e5e; /*untuk button*/
+
+	/* Warna Teks */
+	--color-artisan-dark: #1a1a1a; /* Untuk Heading & Nama Barang */
+	--color-artisan-white: #faf7f6; /* Untuk teks pada tombol */
+	--color-artisan-muted: #71717a; /* Untuk SKU & Detail kecil */
+
+	/* Warna Aksen & Border */
+	--color-artisan-border: #e4e4e7;
+	--color-artisan-active: #787777; /* Untuk menu yang terpilih */
+
+	/* Status Badges (Sangat Penting untuk Dashboard) */
+	--color-status-in-stock-bg: #f0fdf4;
+	--color-status-in-stock-text: #166534;
+
+	--color-status-low-bg: #fff7ed;
+	--color-status-low-text: #9a3412;
+
+	--color-status-out-bg: #fef2f2;
+	--color-status-out-text: #991b1b;
+
+	--color-status-high-bg: #f0fdfa;
+	--color-status-high-text: #115e59;
+}
+
+@layer base {
+	body {
+		font-family: var(--font-manrope);
+		@apply antialiased;
+		background-color: #faf9f4;
+	}
+}
