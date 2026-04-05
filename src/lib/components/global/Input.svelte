@@ -165,5 +165,9 @@
 
 
 <style>
-  
+  /* Sembunyikan tombol "x" bawaan browser (Chrome, Edge, Safari) */
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
 </style>

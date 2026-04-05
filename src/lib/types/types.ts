@@ -6,17 +6,21 @@
 // ENUMS / UNION TYPES
 // ─────────────────────────────────────────
 
-export type StockStatus = 'IN STOCK' | 'LOW STOCK' | 'OUT OF STOCK';
+// Disesuaikan dengan enum Prisma (underscore)
+export type StockStatus = 'IN_STOCK' | 'LOW_STOCK' | 'OUT_OF_STOCK';
 
-export type StockLevel = 'HIGH' | 'NORMAL' | 'LOW' | 'OUT';
-
-export type WarehouseId = 'north' | 'east' | 'central';
+// Helper untuk display label di UI
+export const StockStatusLabel: Record<StockStatus, string> = {
+  IN_STOCK: 'IN STOCK',
+  LOW_STOCK: 'LOW STOCK',
+  OUT_OF_STOCK: 'OUT OF STOCK',
+};
 
 export type SortField =
   | 'name'
   | 'sku'
   | 'currentStock'
-  | 'lastUpdated'
+  | 'updatedAt'
   | 'supplier'
   | 'location';
 
@@ -31,36 +35,136 @@ export type BulkAction =
   | 'update_location'
   | 'assign_supplier';
 
-export type NavItem = 'admin_home' | 'inventory_management' | 'warehouse_map' | 'supply_reports';
+export type NavItem =
+  | 'admin_home'
+  | 'inventory_management'
+  | 'warehouse_map'
+  | 'supply_reports';
+
+export type NotificationType = 'info' | 'success' | 'warning' | 'error';
 
 // ─────────────────────────────────────────
-// LOCATION
+// BACKEND RESPONSE SHAPES
+// Sesuai dengan Prisma include di product.service.ts
 // ─────────────────────────────────────────
 
-export interface WarehouseLocation {
-  aisle: string;       // e.g. "Aisle 4"
-  shelf: string;       // e.g. "Shelf B" | "Floor" | "Rack 4" | "Bin 9"
-  warehouse: string;   // e.g. "North Warehouse" | "East Warehouse" | "Central Hub"
-  warehouseId: WarehouseId;
+export interface CategoryResponse {
+  id: number;
+  name: string;           // e.g. "CERAMICS"
+  subCategory: string;    // e.g. "HOME DECOR"
+}
+
+export interface SupplierResponse {
+  id: number;
+  name: string;           // e.g. "Artisan Clayworks Co."
+}
+
+export interface WarehouseResponse {
+  id: number;
+  name: string;           // e.g. "North Warehouse"
+}
+
+export interface ProductImageResponse {
+  id: number;
+  url: string;
+  isPrimary: boolean;
+}
+
+export interface ProductLocationResponse {
+  aisle: string;          // e.g. "Aisle 4"
+  shelf: string;          // e.g. "Shelf B"
+  warehouse: WarehouseResponse;
+}
+
+// Shape lengkap dari GET /api/products/:id
+export interface InventoryItemResponse {
+  id: number;
+  name: string;
+  sku: string;
+  description: string | null;
+  basePrice: number;
+  salePrice: number;
+  currentStock: number;
+  stockThreshold: number;
+  status: StockStatus;
+  category: CategoryResponse;
+  supplier: SupplierResponse;
+  images: ProductImageResponse[];
+  location: ProductLocationResponse | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Shape dari GET /api/products (list)
+export interface InventoryListResponse {
+  data: InventoryItemResponse[];
+  meta: PaginationMeta;
+}
+
+export interface PaginationMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 // ─────────────────────────────────────────
-// INVENTORY ITEM
+// FRONTEND VIEW MODEL
+// Hasil transform dari InventoryItemResponse
+// untuk dipakai di component
 // ─────────────────────────────────────────
 
 export interface InventoryItem {
-  id: string;
+  id: number;
   name: string;
-  category: string;       // e.g. "CERAMICS"
-  subCategory: string;    // e.g. "HOME DECOR"
-  sku: string;            // e.g. "ART-7729-CV"
+  category: string;         // dari category.name
+  subCategory: string;      // dari category.subCategory
+  sku: string;
   currentStock: number;
-  stockLevel: StockLevel;
+  stockThreshold: number;
   status: StockStatus;
-  location: WarehouseLocation;
-  supplier: string;
-  lastUpdated: string;    // formatted string, e.g. "Today, 09:42 AM" | "Oct 24, 2023"
-  imageUrl?: string;
+  location: {
+    aisle: string;
+    shelf: string;
+    warehouse: string;      // dari location.warehouse.name
+    warehouseId: number;    // dari location.warehouse.id
+  } | null;
+  supplier: string;         // dari supplier.name
+  supplierId: number;       // dari supplier.id
+  imageUrl: string | null;  // dari images.find(isPrimary)?.url
+  updatedAt: string;        // formatted dari updatedAt
+}
+
+// Transform helper: InventoryItemResponse → InventoryItem
+export function toInventoryItem(raw: InventoryItemResponse): InventoryItem {
+  const primaryImage = raw.images.find((img) => img.isPrimary) ?? raw.images[0];
+
+  return {
+    id: raw.id,
+    name: raw.name,
+    category: raw.category.name,
+    subCategory: raw.category.subCategory,
+    sku: raw.sku,
+    currentStock: raw.currentStock,
+    stockThreshold: raw.stockThreshold,
+    status: raw.status,
+    location: raw.location
+      ? {
+          aisle: raw.location.aisle,
+          shelf: raw.location.shelf,
+          warehouse: raw.location.warehouse.name,
+          warehouseId: raw.location.warehouse.id,
+        }
+      : null,
+    supplier: raw.supplier.name,
+    supplierId: raw.supplier.id,
+    imageUrl: primaryImage?.url ?? null,
+    updatedAt: new Date(raw.updatedAt).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    }),
+  };
 }
 
 // ─────────────────────────────────────────
@@ -69,8 +173,8 @@ export interface InventoryItem {
 
 export interface InventoryFilter {
   tab: FilterTab;
-  category: string | null;    // null = All Categories
-  warehouseId: WarehouseId | null; // null = All Warehouses
+  category: string | null;
+  warehouseId: number | null;   // number, sesuai backend
   dateRange: DateRange | null;
   search: string;
 }
@@ -87,7 +191,7 @@ export interface SortState {
 
 export interface PaginationState {
   currentPage: number;
-  perPage: number;        // default 25
+  perPage: number;
   totalItems: number;
   totalPages: number;
 }
@@ -101,12 +205,12 @@ export interface TableColumn {
   label: string;
   sortable: boolean;
   align?: 'left' | 'center' | 'right';
-  width?: string;         // e.g. "w-48"
+  width?: string;
 }
 
 export interface InventoryTableState {
   items: InventoryItem[];
-  selectedIds: Set<string>;
+  selectedIds: Set<number>;     // number, sesuai id dari backend
   filter: InventoryFilter;
   sort: SortState;
   pagination: PaginationState;
@@ -120,7 +224,7 @@ export interface InventoryTableState {
 export interface RowAction {
   id: 'view' | 'history' | 'edit' | 'reorder';
   label: string;
-  icon: string;           // icon name / identifier
+  icon: string;
 }
 
 export interface BulkActionOption {
@@ -158,12 +262,38 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 // NOTIFICATIONS
 // ─────────────────────────────────────────
 
-export type NotificationType = 'info' | 'success' | 'warning' | 'error';
-
 export interface Notification {
   id: string;
   type: NotificationType;
   message: string;
   read: boolean;
   createdAt: Date;
+}
+
+// ─────────────────────────────────────────
+// ADMIN OVERVIEW
+// ─────────────────────────────────────────
+
+export interface OverviewStats {
+  totalInventoryValue: number;
+  lowStockItems: number;
+  recentActivity: ActivityLog[];
+  warehouseZones: WarehouseZone[];
+}
+
+export interface ActivityLog {
+  id: number;
+  description: string;
+  delta: number | null;
+  status: string | null;
+  createdAt: string;
+  user: { id: number; name: string; avatar: string | null } | null;
+  product: { id: number; name: string; sku: string } | null;
+}
+
+export interface WarehouseZone {
+  id: number;
+  name: string;           // e.g. "Zone A (Ceramics)"
+  percentage: number;
+  warehouse: WarehouseResponse;
 }

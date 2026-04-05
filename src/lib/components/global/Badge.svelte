@@ -10,15 +10,15 @@
 	let { status, class: classname = '' }: Props = $props();
 
 	const config: Record<StockStatus, { label: string; class: string }> = {
-		'IN STOCK': {
+		'IN_STOCK': {
 			label: 'In Stock',
 			class: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
 		},
-		'LOW STOCK': {
+		'LOW_STOCK': {
 			label: 'Low Stock',
 			class: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'
 		},
-		'OUT OF STOCK': {
+		'OUT_OF_STOCK': {
 			label: 'Out',
 			class: 'bg-red-50 text-red-500 ring-1 ring-red-200'
 		}
