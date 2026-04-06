@@ -2,7 +2,13 @@
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import FilterBar from '$lib/components/global/FilterBar.svelte';
 	import InventoryTable from '$lib/components/features/Inventory/InventoryTable.svelte';
-	import type { InventoryItem, InventoryFilter, BulkActionOption } from '$lib/types/types';
+	import type {
+		InventoryItem,
+		InventoryFilter,
+		BulkActionOption,
+		InventoryListResponse
+	} from '$lib/types/types';
+	import { toInventoryItem } from '$lib/types/types';
 	import { env } from '$env/dynamic/public';
 
 	// Mengambil data dari +page.ts
@@ -72,8 +78,8 @@
 			const res = await fetch(`${env.PUBLIC_API_URL}/products?${params.toString()}`);
 
 			if (res.ok) {
-				const responseData = await res.json();
-				items = responseData.data;
+				const responseData = (await res.json()) as InventoryListResponse;
+				items = responseData.data.map(toInventoryItem);
 				console.log('Data tabel berhasil diupdate sesuai filter!');
 			} else {
 				console.error('Gagal mengambil data filter. Status:', res.status);

@@ -43,6 +43,7 @@
 				bind:value={name}
 				placeholder="e.g. Hand-Carved Oak Chair"
 				size="md"
+				class="bg-[#F4F4EE]"
 			/>
 		</div>
 
@@ -50,7 +51,7 @@
 			<label for="sku" class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase">
 				SKU / Identifier
 			</label>
-			<Input id="sku" bind:value={sku} placeholder="ART-OK-001" size="md" />
+			<Input id="sku" bind:value={sku} placeholder="ART-OK-001" size="md" class="bg-[#F4F4EE]" />
 		</div>
 	</div>
 
@@ -67,7 +68,7 @@
 			bind:value={description}
 			placeholder="Detailed product specifications, material origin, and handling instructions..."
 			rows={5}
-			class="w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 transition-all outline-none placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
+			class="w-full resize-none rounded-lg border border-slate-200 bg-[#F4F4EE] px-3 py-2.5 text-sm text-slate-700 transition-all outline-none placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
 		></textarea>
 	</div>
 </div>

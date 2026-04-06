@@ -130,8 +130,8 @@
 					class={cn(
 						'flex h-36 w-48 flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed transition-colors',
 						isDragging
-							? 'border-slate-400 bg-slate-50'
-							: 'border-slate-200 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-50'
+							? 'border-slate-400 bg-[#E8E8E2]'
+							: 'border-slate-200 bg-[#F4F4EE] hover:border-slate-300 hover:bg-[#ECECE6]'
 					)}
 				>
 					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="text-slate-300">
@@ -201,7 +201,7 @@
 			<button
 				type="button"
 				onclick={() => additionalInputEl?.click()}
-				class="flex h-36 w-36 flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 text-slate-400 transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-slate-500"
+				class="flex h-36 w-36 flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-slate-200 bg-[#F4F4EE] text-slate-400 transition-colors hover:border-slate-300 hover:bg-[#ECECE6] hover:text-slate-500"
 			>
 				<Plus size={20} />
 				<span class="text-[11px] font-medium tracking-wide uppercase">Add More</span>

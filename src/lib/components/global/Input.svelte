@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { cn } from '$lib/utils/cn';
 
   type InputType = 'text' | 'search' | 'email' | 'number' | 'password';
   type InputSize = 'sm' | 'md' | 'lg';
@@ -74,7 +75,7 @@
   );
 </script>
 
-<div class="flex w-full flex-col gap-1.5 {className}">
+<div class="flex w-full flex-col gap-1.5">
 
   {#if label}
     <label for={id} class="text-xs font-medium tracking-wide text-stone-500">
@@ -83,12 +84,13 @@
   {/if}
 
   <div
-    class="
-      relative flex w-full items-center border bg-white transition-all
-      {wrapperSize[size]}
-      {borderClass}
-      {disabled ? 'cursor-not-allowed bg-stone-50 opacity-60' : ''}
-    "
+    class={cn(
+      'relative flex w-full items-center border bg-white transition-all',
+      wrapperSize[size],
+      borderClass,
+      disabled ? 'cursor-not-allowed bg-stone-50 opacity-60' : '',
+      className
+    )}
   >
 
     {#if type === 'search'}
