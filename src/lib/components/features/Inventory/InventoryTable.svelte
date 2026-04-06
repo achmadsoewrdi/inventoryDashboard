@@ -1,57 +1,48 @@
 <script lang="ts">
-	import Pagination from '$lib/components/global/Pagination.svelte';
 	import type { InventoryItem } from '$lib/types/types';
 	import InventoryTableRow from './InventoryTableRow.svelte';
 	import Chekbox from '$lib/components/global/Chekbox.svelte';
+	import Button from '$lib/components/global/Button.svelte';
 
 	interface Props {
 		items: InventoryItem[];
+		selectedIds?: Set<number>;
+		onToggleSelection?: (id: number) => void;
+		onSelectAll?: (checked: boolean) => void;
+		onEdit?: (item: InventoryItem) => void;
+		onDelete?: (id: number) => void;
 	}
 
-	let { items }: Props = $props();
-
-	let selectedId = $state<number[]>([]);
-	let currentPage = $state(1);
-	let itemsPerPage = 5;
-
-	// Pagination logic
-	let totalPages = $derived(Math.ceil(items.length / itemsPerPage));
-	let paginatedItems = $derived(
-		items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-	);
+	let {
+		items,
+		selectedIds = new Set(),
+		onToggleSelection,
+		onSelectAll,
+		onEdit,
+		onDelete
+	}: Props = $props();
 
 	// logic select All
-	let isAllSelected = $derived(items.length > 0 && selectedId.length === items.length);
-	let isIndeterminate = $derived(selectedId.length > 0 && selectedId.length < items.length);
+	let isAllSelected = $derived(items.length > 0 && selectedIds.size === items.length);
+	let isIndeterminate = $derived(selectedIds.size > 0 && selectedIds.size < items.length);
 
 	function toggleSelectAll() {
-		if (isAllSelected) {
-			selectedId = [];
-		} else {
-			selectedId = items.map((item) => item.id);
-		}
+		onSelectAll?.(!isAllSelected);
 	}
 
 	function toggleItemSelection(id: number) {
-		if (selectedId.includes(id)) {
-			selectedId = selectedId.filter((itemId) => itemId !== id);
-		} else {
-			selectedId = [...selectedId, id];
-		}
-	}
-
-	function handlePageChange(page: number) {
-		currentPage = page;
+		onToggleSelection?.(id);
 	}
 </script>
 
 <div class="w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-	<div class="border-b border-slate-100 p-4">
+	<div class="flex items-center justify-between border-b border-slate-100 p-4">
 		<h3 class="text-sm font-semibold tracking-wider text-slate-800 uppercase">
-			Master Inventory <span class="ml-1 font-normal text-slate-400 normal-case"
-				>{items.length}</span
+			Master Inventory List <span class="ml-1 font-normal text-slate-400 normal-case"
+				>({items.length} items)</span
 			>
 		</h3>
+		<Button size="sm">Tambah Item</Button>
 	</div>
 
 	<div class="overflow-x-auto">
@@ -85,11 +76,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each paginatedItems as item (item.id)}
+				{#each items as item (item.id)}
 					<InventoryTableRow
 						{item}
-						selected={selectedId.includes(item.id)}
+						selected={selectedIds.has(item.id)}
 						onToggleSelection={toggleItemSelection}
+						onEdit={onEdit}
+						onDelete={(item) => onDelete?.(item.id)}
 					/>
 				{:else}
 					<tr>
@@ -99,17 +92,4 @@
 			</tbody>
 		</table>
 	</div>
-
-	<!-- Pagination Footer -->
-	{#if items.length > itemsPerPage}
-		<div class="border-t border-slate-100 bg-slate-50/10 p-4">
-			<Pagination
-				bind:currentPage
-				{totalPages}
-				totalItems={items.length}
-				perPage={itemsPerPage}
-				onPageChange={handlePageChange}
-			/>
-		</div>
-	{/if}
 </div>

@@ -32,7 +32,7 @@
 
 	const variantClasses = {
 		primary:
-			'bg-artisan-primary text-artisan-white hover:bg-artisan-active focus:bg-artisan-active focus:ring-2 focus:ring-offset-2 focus:ring-artisan-primary',
+			'bg-stone-800 text-artisan-white hover:bg-stone-700 focus:bg-stone-700 focus:ring-2 focus:ring-offset-2 focus:ring-stone-800',
 
 		secondary:
 			'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:ring-2 focus:ring-offset-2 focus:ring-gray-300',
