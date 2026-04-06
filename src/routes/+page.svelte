@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FilterBar from '$lib/components/global/FilterBar.svelte';
-	import InventoryTableRow from '$lib/components/features/Inventory/InventoryTableRow.svelte';
+	import InventoryTable from '$lib/components/features/Inventory/InventoryTable.svelte';
 	import type { InventoryFilter, BulkActionOption, InventoryItem } from '$lib/types/types';
 
 	// Dummy state for FilterBar test
@@ -34,7 +34,7 @@
 		sku: 'CRM-VSE-001',
 		currentStock: 120,
 		stockThreshold: 50,
-		status: 'IN_STOCK',
+		status: 'LOW_STOCK',
 		location: {
 			aisle: 'Aisle 4',
 			shelf: 'Shelf B',
@@ -47,8 +47,6 @@
 			'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=200&auto=format&fit=crop',
 		updatedAt: new Date().toLocaleDateString()
 	};
-
-	let rowSelected = $state(false);
 
 	function handleFilterChange(newFilter: InventoryFilter) {
 		console.log('Filter changed:', newFilter);
@@ -80,51 +78,18 @@
 		onExport={handleExport}
 	/>
 
-	<!-- InventoryTableRow Component Test -->
-	<div class="mt-8 overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-		<h2
-			class="border-b border-stone-200 bg-stone-50 px-4 py-3 text-sm font-semibold tracking-wider text-stone-500 uppercase"
-		>
-			Inventory Table Row Test
-		</h2>
-		<div class="overflow-x-auto">
-			<table class="w-full text-left text-sm whitespace-nowrap">
-				<thead
-					class="border-b border-stone-200 bg-stone-50 text-xs tracking-wider text-stone-500 uppercase"
-				>
-					<tr>
-						<th class="w-12 p-4 text-center">
-							<input type="checkbox" class="h-4 w-4 rounded border-stone-300" />
-						</th>
-						<th class="p-4 font-semibold">Product</th>
-						<th class="p-4 font-semibold">Category</th>
-						<th class="p-4 font-semibold">Stock</th>
-						<th class="p-4 font-semibold">Status</th>
-						<th class="p-4 font-semibold">Location</th>
-						<th class="p-4 text-right font-semibold">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- Preview of the single row -->
-					<InventoryTableRow
-						item={dummyItem}
-						selected={rowSelected}
-						onToggleSelection={() => (rowSelected = !rowSelected)}
-					/>
-				</tbody>
-			</table>
-		</div>
-	</div>
-
-	<!-- Debug Output to display current state -->
-	<div class="mt-8 rounded-lg border border-stone-200 bg-white p-4">
-		<h2 class="mb-2 text-sm font-semibold tracking-wider text-stone-500 uppercase">
-			Debug Internal State
-		</h2>
-		<pre class="overflow-auto text-xs text-stone-600">{JSON.stringify(
-				{ filter, selectedCount },
-				null,
-				2
-			)}</pre>
+	<!-- InventoryTable Component Test -->
+	<div class="mt-8">
+		<InventoryTable
+			items={[
+				dummyItem,
+				{ ...dummyItem, id: 2, name: 'Clay Pot', sku: 'CRM-POT-002' },
+				{ ...dummyItem, id: 3, name: 'Glass Vase', sku: 'GLS-VSE-003', status: 'IN_STOCK' },
+				{ ...dummyItem, id: 4, name: 'Wooden Bowl', sku: 'WOD-BWL-004' },
+				{ ...dummyItem, id: 5, name: 'Metal Tray', sku: 'MTL-TRY-005', status: 'OUT_OF_STOCK' },
+				{ ...dummyItem, id: 6, name: 'Silk Flowers', sku: 'SLK-FLW-006' },
+				{ ...dummyItem, id: 7, name: 'Candle Holder', sku: 'CND-HLD-007', status: 'IN_STOCK' }
+			]}
+		/>
 	</div>
 </div>
