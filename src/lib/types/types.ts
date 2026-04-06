@@ -222,7 +222,7 @@ export interface InventoryTableState {
 // ─────────────────────────────────────────
 
 export interface RowAction {
-  id: 'view' | 'history' | 'edit' | 'reorder';
+  id: 'view' | 'edit' | 'reorder';
   label: string;
   icon: string;
 }
