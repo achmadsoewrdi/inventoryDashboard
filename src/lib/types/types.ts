@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/public';
 // ============================================================
 // ARTISAN OPS — Master Type Definitions
 // ============================================================
@@ -158,7 +159,9 @@ export function toInventoryItem(raw: InventoryItemResponse): InventoryItem {
       : null,
     supplier: raw.supplier.name,
     supplierId: raw.supplier.id,
-    imageUrl: primaryImage?.url ?? null,
+    imageUrl: primaryImage?.url 
+      ? (primaryImage.url.startsWith('http') ? primaryImage.url : `${env.PUBLIC_API_URL}${primaryImage.url}`) 
+      : null,
     updatedAt: new Date(raw.updatedAt).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -296,4 +299,32 @@ export interface WarehouseZone {
   name: string;           // e.g. "Zone A (Ceramics)"
   percentage: number;
   warehouse: WarehouseResponse;
+}
+
+// ─────────────────────────────────────────
+// FORM — Add New Product
+// ─────────────────────────────────────────
+
+export interface CreateProductForm {
+  // Basic Information
+  name: string;
+  sku: string;
+  description: string;
+
+  // Value & Stock
+  basePrice: number;
+  salePrice: number;
+  currentStock: number;
+  stockThreshold: number;
+
+  // Warehouse Logistics
+  supplierId: number | null;
+  location: {
+    warehouseId: number | null;
+    aisle: string;
+    shelf: string;
+  };
+
+  // Media
+  images: File[];
 }

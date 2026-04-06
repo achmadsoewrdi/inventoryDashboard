@@ -3,6 +3,7 @@
 	import InventoryTableRow from './InventoryTableRow.svelte';
 	import Chekbox from '$lib/components/global/Chekbox.svelte';
 	import Button from '$lib/components/global/Button.svelte';
+	import { goto } from '$app/navigation';
 
 	interface Props {
 		items: InventoryItem[];
@@ -42,7 +43,7 @@
 				>({items.length} items)</span
 			>
 		</h3>
-		<Button size="sm">Tambah Item</Button>
+		<Button size="sm" onClick={() => goto('/inventory/add-item')}>Tambah Item</Button>
 	</div>
 
 	<div class="overflow-x-auto">
@@ -81,7 +82,7 @@
 						{item}
 						selected={selectedIds.has(item.id)}
 						onToggleSelection={toggleItemSelection}
-						onEdit={onEdit}
+						{onEdit}
 						onDelete={(item) => onDelete?.(item.id)}
 					/>
 				{:else}
