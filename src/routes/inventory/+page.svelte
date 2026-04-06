@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
+	import { goto } from '$app/navigation';
 	import FilterBar from '$lib/components/global/FilterBar.svelte';
 	import InventoryTable from '$lib/components/features/Inventory/InventoryTable.svelte';
 	import type {
@@ -35,8 +36,7 @@
 	}
 
 	function handleEditItem(item: InventoryItem) {
-		console.log('Klik edit untuk item:', item);
-		alert(`Aksi edit untuk ${item.name} belum ada halaman/formnya.`);
+		goto(`/inventory/edit/${item.id}`);
 	}
 
 	// ==== STATE & HANDLER UNTUK FILTER BAR ====
@@ -107,11 +107,6 @@
 </svelte:head>
 
 <div class="flex flex-col gap-6 p-6">
-	<div class="flex flex-col gap-1">
-		<h1 class="text-2xl font-bold tracking-tight text-slate-900">Inventory Items</h1>
-		<p class="text-slate-500">Kelola dan lihat list inventory Anda dari backend Fastify.</p>
-	</div>
-
 	<FilterBar
 		bind:filter={filterData}
 		categories={categoriesList}
