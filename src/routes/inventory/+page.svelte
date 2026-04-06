@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import FilterBar from '$lib/components/global/FilterBar.svelte';
 	import InventoryTable from '$lib/components/features/Inventory/InventoryTable.svelte';
 	import type { InventoryItem, InventoryFilter, BulkActionOption } from '$lib/types/types';
@@ -58,6 +59,28 @@
 
 	async function handleFilterChange(newFilter: InventoryFilter) {
 		console.log('Filter berubah:', newFilter);
+		const params = new SvelteURLSearchParams();
+		if (newFilter.search) {
+			params.append('search', newFilter.search);
+		}
+
+		if (newFilter.category && newFilter.category !== 'all') {
+			params.append('category', newFilter.category);
+		}
+
+		try {
+			const res = await fetch(`${env.PUBLIC_API_URL}/products?${params.toString()}`);
+
+			if (res.ok) {
+				const responseData = await res.json();
+				items = responseData.data;
+				console.log('Data tabel berhasil diupdate sesuai filter!');
+			} else {
+				console.error('Gagal mengambil data filter. Status:', res.status);
+			}
+		} catch (error) {
+			console.error('Error saat fetch data filter:', error);
+		}
 	}
 
 	function handleBulkAction(actionId: string) {
