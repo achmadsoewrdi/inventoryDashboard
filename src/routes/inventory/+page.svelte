@@ -48,12 +48,11 @@
 		dateRange: null
 	});
 
-	const categoriesList = ['Ceramics', 'Furniture', 'Lighting', 'Textiles'];
-	const warehousesList = [
-		{ id: 1, name: 'North Warehouse' },
-		{ id: 2, name: 'East Warehouse' },
-		{ id: 3, name: 'Central Hub' }
-	];
+	// Ambil categories & warehouses dari data loader (real dari DB)
+	const categoriesList = $derived(
+		(data?.categories ?? []).map((c: { id: number; name: string }) => c.name)
+	);
+	const warehousesList = $derived(data?.warehouses ?? []);
 
 	const bulkActionsList: BulkActionOption[] = [
 		{ id: 'delete', label: 'Delete Selected', destructive: true },
@@ -66,12 +65,29 @@
 	async function handleFilterChange(newFilter: InventoryFilter) {
 		console.log('Filter berubah:', newFilter);
 		const params = new SvelteURLSearchParams();
+
 		if (newFilter.search) {
 			params.append('search', newFilter.search);
 		}
 
+		// Category: cari id berdasarkan nama yang dipilih
 		if (newFilter.category && newFilter.category !== 'all') {
-			params.append('category', newFilter.category);
+			const matched = (data?.categories ?? []).find(
+				(c: { id: number; name: string }) => c.name === newFilter.category
+			);
+			if (matched) {
+				params.append('categoryId', String(matched.id));
+			}
+		}
+
+		// Warehouse: kirim warehouseId langsung (sudah number)
+		if (newFilter.warehouseId != null) {
+			params.append('warehouseId', String(newFilter.warehouseId));
+		}
+
+		// Tab: kirim tab ke API (backend support low_stock filtering)
+		if (newFilter.tab && newFilter.tab !== 'all') {
+			params.append('tab', newFilter.tab);
 		}
 
 		try {
@@ -101,6 +117,7 @@
 		console.log('Export data...');
 	}
 </script>
+
 
 <svelte:head>
 	<title>Inventory | Artisan Ops</title>

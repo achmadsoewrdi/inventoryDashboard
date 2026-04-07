@@ -6,6 +6,7 @@
 		FileBarChart2,
 		User,
 		LogOut,
+		ChevronLeft,
 		type Icon
 	} from 'lucide-svelte';
 	import { cn } from '$lib/utils/cn';
@@ -22,7 +23,10 @@
 	}
 
 	let { class: className = '' }: Props = $props();
-	let currentPath = $derived(page.url.pathname);
+	let currentPath = $derived(page.url?.pathname ?? '');
+
+	// state collapse sidebar
+	let collapsed = $state(false);
 
 	const navItems: NavItem[] = [
 		{ label: 'Admin Home', href: '/', icon: LayoutDashboard },
@@ -34,25 +38,53 @@
 	const isActive = (href: string) => currentPath === href;
 </script>
 
-<aside class={cn('flex h-screen w-64 flex-col bg-artisan-sidebar font-manrope', className)}>
+<aside
+	class={cn(
+		'relative flex h-screen flex-col bg-artisan-sidebar font-manrope transition-all duration-300 ease-in-out',
+		collapsed ? 'w-16' : 'w-64',
+		className
+	)}
+>
+	<!-- Tombol toggle collapse -->
+	<button
+		type="button"
+		onclick={() => (collapsed = !collapsed)}
+		class="absolute top-6 -right-3 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-artisan-border bg-white shadow-sm transition-colors hover:bg-slate-50"
+		aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+	>
+		<ChevronLeft
+			class={cn(
+				'h-3.5 w-3.5 text-artisan-muted transition-transform duration-300',
+				collapsed ? 'rotate-180' : 'rotate-0'
+			)}
+		/>
+	</button>
+
 	<!-- Logo -->
-	<div class="px-6 py-6">
-		<p class="text-base font-bold tracking-wide text-artisan-dark">ARTISAN OPS</p>
-		<p class="text-xs font-medium tracking-widest text-artisan-muted">ADMIN DASHBOARD</p>
+	<div class="overflow-hidden px-4 py-6">
+		{#if !collapsed}
+			<p class="text-base font-bold tracking-wide text-artisan-dark">ARTISAN OPS</p>
+			<p class="text-xs font-medium tracking-widest text-artisan-muted">ADMIN DASHBOARD</p>
+		{:else}
+			<!-- waktu collapsed, tampilin inisial aja biar gak kosong -->
+			<p class="text-center text-base font-bold text-artisan-dark">AO</p>
+		{/if}
 	</div>
 
 	<div class="mx-4 border-t border-artisan-border"></div>
 
 	<!-- Nav Items -->
-	<nav class="flex flex-col gap-1 px-3 py-4">
+	<nav class="flex flex-col gap-1 px-2 py-4">
 		{#each navItems as item (item.href)}
 			{@const active = isActive(item.href)}
 			<a
 				href={item.href}
 				aria-label={item.label}
 				aria-current={active ? 'page' : undefined}
+				title={collapsed ? item.label : undefined}
 				class={cn(
 					'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors',
+					collapsed ? 'justify-center' : '',
 					active
 						? 'bg-artisan-active/15 text-artisan-dark'
 						: 'text-artisan-muted hover:bg-artisan-active/10 hover:text-artisan-dark'
@@ -64,7 +96,9 @@
 						active ? 'fill-current text-artisan-dark' : 'fill-none text-artisan-muted'
 					)}
 				/>
-				{item.label}
+				{#if !collapsed}
+					<span class="truncate">{item.label}</span>
+				{/if}
 			</a>
 		{/each}
 	</nav>
@@ -74,22 +108,34 @@
 	<div class="mx-4 border-t border-artisan-border"></div>
 
 	<!-- Bottom Menu -->
-	<div class="flex flex-col gap-1 px-3 py-4">
+	<div class="flex flex-col gap-1 px-2 py-4">
 		<a
 			href="/account"
 			aria-label="My Account"
-			class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-artisan-muted transition-colors hover:bg-artisan-active/10 hover:text-artisan-dark"
+			title={collapsed ? 'My Account' : undefined}
+			class={cn(
+				'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-artisan-muted transition-colors hover:bg-artisan-active/10 hover:text-artisan-dark',
+				collapsed ? 'justify-center' : ''
+			)}
 		>
 			<User class="h-4 w-4 shrink-0 text-artisan-muted" />
-			My Account
+			{#if !collapsed}
+				<span>My Account</span>
+			{/if}
 		</a>
 
 		<button
 			type="button"
-			class="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-artisan-muted transition-colors hover:bg-artisan-active/10 hover:text-artisan-dark"
+			title={collapsed ? 'Sign Out' : undefined}
+			class={cn(
+				'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-artisan-muted transition-colors hover:bg-artisan-active/10 hover:text-artisan-dark',
+				collapsed ? 'justify-center' : ''
+			)}
 		>
 			<LogOut class="h-4 w-4 shrink-0 text-artisan-muted" />
-			Sign Out
+			{#if !collapsed}
+				<span>Sign Out</span>
+			{/if}
 		</button>
 	</div>
 </aside>

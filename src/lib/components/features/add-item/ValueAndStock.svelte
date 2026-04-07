@@ -18,19 +18,30 @@
 		class: className = ''
 	}: Props = $props();
 
-	// Format angka jadi currency display
-	function formatCurrency(val: number) {
-		return val.toFixed(2);
+	// format rupiah buat display di input text
+	function formatRupiah(val: number) {
+		return new Intl.NumberFormat('id-ID').format(val);
 	}
+
+	// pas user ngetik, stripping non-digit dulu baru parse
+	function parseRupiah(raw: string): number {
+		return parseInt(raw.replace(/\D/g, '')) || 0;
+	}
+
+	// state display string buat input text
+	let basePriceDisplay = $state(formatRupiah(basePrice));
+	let salePriceDisplay = $state(formatRupiah(salePrice));
 
 	function handleBasePriceInput(e: Event) {
 		const raw = (e.currentTarget as HTMLInputElement).value;
-		basePrice = parseFloat(raw) || 0;
+		basePrice = parseRupiah(raw);
+		basePriceDisplay = formatRupiah(basePrice);
 	}
 
 	function handleSalePriceInput(e: Event) {
 		const raw = (e.currentTarget as HTMLInputElement).value;
-		salePrice = parseFloat(raw) || 0;
+		salePrice = parseRupiah(raw);
+		salePriceDisplay = formatRupiah(salePrice);
 	}
 </script>
 
@@ -52,15 +63,14 @@
 				Base Price
 			</span>
 			<div class="flex items-baseline gap-1">
-				<span class="text-lg font-semibold text-[#5C5C55]">$</span>
+				<span class="text-lg font-semibold text-[#5C5C55]">Rp</span>
 				<input
-					type="number"
-					min="0"
-					step="0.01"
-					value={formatCurrency(basePrice)}
+					type="text"
+					inputmode="numeric"
+					value={basePriceDisplay}
 					oninput={handleBasePriceInput}
-					class="w-full [appearance:textfield] bg-transparent text-2xl font-bold text-slate-800 outline-none placeholder:text-slate-300 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-					placeholder="0.00"
+					class="w-full bg-transparent text-2xl font-bold text-slate-800 outline-none placeholder:text-slate-300"
+					placeholder="0"
 				/>
 			</div>
 		</div>
@@ -71,15 +81,14 @@
 				Sale Price
 			</span>
 			<div class="flex items-baseline gap-1">
-				<span class="text-lg font-semibold text-[#5C5C55]">$</span>
+				<span class="text-lg font-semibold text-[#5C5C55]">Rp</span>
 				<input
-					type="number"
-					min="0"
-					step="0.01"
-					value={formatCurrency(salePrice)}
+					type="text"
+					inputmode="numeric"
+					value={salePriceDisplay}
 					oninput={handleSalePriceInput}
-					class="w-full [appearance:textfield] bg-transparent text-2xl font-bold text-slate-800 outline-none placeholder:text-slate-300 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-					placeholder="0.00"
+					class="w-full bg-transparent text-2xl font-bold text-slate-800 outline-none placeholder:text-slate-300"
+					placeholder="0"
 				/>
 			</div>
 		</div>

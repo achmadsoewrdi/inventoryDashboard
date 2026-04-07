@@ -68,10 +68,7 @@
 					<th class="p-4 text-xs font-semibold tracking-wider text-slate-500 uppercase">
 						Status
 					</th>
-					<th class="p-4 text-xs font-semibold tracking-wider text-slate-500 uppercase">
-						Location
-					</th>
-					<th class="p-4 text-right text-xs font-semibold tracking-wider text-slate-500 uppercase">
+					<th class="p-4 text-center text-xs font-semibold tracking-wider text-slate-500 uppercase">
 						Actions
 					</th>
 				</tr>
@@ -87,7 +84,7 @@
 					/>
 				{:else}
 					<tr>
-						<td colspan="8" class="p-8 text-center text-slate-400"> No items found </td>
+						<td colspan="7" class="p-8 text-center text-slate-400"> No items found </td>
 					</tr>
 				{/each}
 			</tbody>

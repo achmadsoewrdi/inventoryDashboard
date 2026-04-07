@@ -2,7 +2,7 @@
 	import type { InventoryItem } from '$lib/types/types';
 	import Badge from '$lib/components/global/Badge.svelte';
 	import Chekbox from '$lib/components/global/Chekbox.svelte';
-	import { EllipsisVertical, Pencil, Trash2, Eye, History } from 'lucide-svelte';
+	import { EllipsisVertical, Pencil, Trash2, Eye } from 'lucide-svelte';
 	import { cn } from '$lib/utils/cn';
 
 	interface Props {
@@ -15,15 +15,7 @@
 		onHistory?: (item: InventoryItem) => void;
 	}
 
-	let {
-		item,
-		selected = false,
-		onToggleSelection,
-		onView,
-		onEdit,
-		onDelete,
-		onHistory
-	}: Props = $props();
+	let { item, selected = false, onToggleSelection, onView, onEdit, onDelete }: Props = $props();
 
 	let menuOpen = $state(false);
 	let btnEl = $state<HTMLButtonElement | null>(null);
@@ -76,15 +68,6 @@
 		>
 			<Eye size={14} class="text-slate-400" />
 			View Detail
-		</button>
-
-		<button
-			type="button"
-			onclick={() => handleAction(() => onHistory?.(item))}
-			class="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-slate-50"
-		>
-			<History size={14} class="text-slate-400" />
-			History
 		</button>
 
 		<button
@@ -176,18 +159,8 @@
 		<Badge status={item.status} />
 	</td>
 
-	<!-- Location -->
-	<td class="p-4 text-sm text-slate-600">
-		{#if item.location}
-			<span>{item.location.warehouse}</span>
-			<span class="block text-xs text-slate-400">{item.location.aisle}, {item.location.shelf}</span>
-		{:else}
-			<span class="text-slate-400 italic">Not Assigned</span>
-		{/if}
-	</td>
-
 	<!-- Actions -->
-	<td class="p-4 text-right">
+	<td class="p-4 text-center">
 		<button
 			bind:this={btnEl}
 			type="button"
