@@ -2,42 +2,44 @@
 
 @theme {
 	--font-manrope: 'Manrope', sans-serif;
-	/* Background Utama (Sidebar) */
-	--color-artisan-sidebar: #e2e4d8;
 
-	/* Background Halaman Utama */
-	--color-artisan-bg: #f9f9f7;
+	/* Background Utama (Sidebar) - Abu-abu kehijauan lembut untuk pemisah visual */
+	--color-artisan-sidebar: #e4e8e5;
 
-	/* untuk button */
-	--color-artisan-primary: #5f5e5e; /*untuk button*/
+	/* Background Halaman Utama - Utilitarian Mint (Lebih bersih dan segar) */
+	--color-artisan-bg: #f3fdf3;
 
-	/* Warna Teks */
-	--color-artisan-dark: #1a1a1a; /* Untuk Heading & Nama Barang */
-	--color-artisan-white: #faf7f6; /* Untuk teks pada tombol */
-	--color-artisan-muted: #71717a; /* Untuk SKU & Detail kecil */
+	/* untuk button - Emerald Gelap (Kuat, menonjol, dan profesional) */
+	--color-artisan-primary: #047857;
+
+	/* Warna Teks - Hijau sangat gelap (Slate/Emerald) agar tidak terlalu kontras seperti hitam pekat */
+	--color-artisan-dark: #064e3b;
+	--color-artisan-white: #ffffff;
+	--color-artisan-muted: #6b7280;
 
 	/* Warna Aksen & Border */
-	--color-artisan-border: #e4e4e7;
-	--color-artisan-active: #787777; /* Untuk menu yang terpilih */
+	--color-artisan-border: #d1d5db;
+	--color-artisan-active: #10b981; /* Hijau Mint cerah untuk menu aktif/fokus */
 
-	/* Status Badges (Sangat Penting untuk Dashboard) */
-	--color-status-in-stock-bg: #f0fdf4;
-	--color-status-in-stock-text: #166534;
+	/* Status Badges (Diselaraskan agar lebih harmonis dengan tema Mint) */
+	--color-status-in-stock-bg: #ecfdf5;
+	--color-status-in-stock-text: #047857;
 
-	--color-status-low-bg: #fff7ed;
-	--color-status-low-text: #9a3412;
+	--color-status-low-bg: #fffbeb;
+	--color-status-low-text: #b45309;
 
 	--color-status-out-bg: #fef2f2;
-	--color-status-out-text: #991b1b;
+	--color-status-out-text: #b91c1c;
 
 	--color-status-high-bg: #f0fdfa;
-	--color-status-high-text: #115e59;
+	--color-status-high-text: #0f766e;
 }
 
 @layer base {
 	body {
 		font-family: var(--font-manrope);
 		@apply antialiased;
-		background-color: #faf9f4;
+		/* Menggunakan variabel agar otomatis mengikuti tema */
+		background-color: var(--color-artisan-bg);
 	}
 }

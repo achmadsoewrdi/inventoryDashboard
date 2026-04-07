@@ -32,16 +32,16 @@
 
 	const variantClasses = {
 		primary:
-			'bg-stone-800 text-artisan-white hover:bg-stone-700 focus:bg-stone-700 focus:ring-2 focus:ring-offset-2 focus:ring-stone-800',
+			'bg-artisan-primary text-artisan-white hover:bg-artisan-dark focus:bg-artisan-dark focus:ring-2 focus:ring-offset-2 focus:ring-artisan-primary',
 
 		secondary:
-			'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:ring-2 focus:ring-offset-2 focus:ring-gray-300',
+			'bg-artisan-sidebar text-artisan-dark hover:bg-artisan-border focus:bg-artisan-border focus:ring-2 focus:ring-offset-2 focus:ring-artisan-border',
 
 		outline:
-			'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 hover:border-gray-400 focus:bg-gray-50 focus:ring-gray-300',
+			'border border-artisan-border bg-transparent text-artisan-dark hover:bg-artisan-sidebar hover:border-artisan-muted focus:bg-artisan-sidebar focus:ring-artisan-active',
 
 		ghost:
-			'bg-transparent text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:ring-gray-300'
+			'bg-transparent text-artisan-muted hover:bg-artisan-sidebar hover:text-artisan-dark focus:bg-artisan-sidebar focus:ring-artisan-active'
 	};
 
 	const sizeClasses = {

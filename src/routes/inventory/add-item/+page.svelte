@@ -121,20 +121,20 @@
 		<div class="flex items-center gap-3">
 			<a
 				href="/inventory"
-				class="flex size-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:text-slate-800"
+				class="flex size-8 items-center justify-center rounded-lg border border-artisan-border bg-white text-artisan-muted shadow-sm transition hover:border-artisan-muted hover:text-artisan-dark"
 			>
 				<ArrowLeft size={15} />
 			</a>
 			<div>
-				<h1 class="text-xl font-bold tracking-tight text-slate-900">Add New Item</h1>
-				<p class="text-sm text-slate-400">Tambah produk baru ke master inventory</p>
+				<h1 class="text-xl font-bold tracking-tight text-artisan-dark">Add New Item</h1>
+				<p class="text-sm text-artisan-muted">Tambah produk baru ke master inventory</p>
 			</div>
 		</div>
 
 		<div class="flex items-center gap-2">
 			<a
 				href="/inventory"
-				class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:bg-slate-50"
+				class="rounded-lg border border-artisan-border bg-white px-4 py-2 text-sm font-medium text-artisan-dark shadow-sm transition hover:bg-artisan-sidebar"
 			>
 				Batal
 			</a>
@@ -142,7 +142,7 @@
 				type="button"
 				onclick={handleSubmit}
 				disabled={isSubmitting || submitSuccess}
-				class="flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+				class="flex items-center gap-2 rounded-lg bg-artisan-primary px-4 py-2 text-sm font-medium text-artisan-white shadow-sm transition hover:bg-artisan-dark disabled:cursor-not-allowed disabled:opacity-60"
 			>
 				{#if isSubmitting}
 					<Loader size={14} class="animate-spin" />
@@ -191,9 +191,9 @@
 			<ProductMediaUpload bind:images />
 
 			<!-- Category -->
-			<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+			<div class="rounded-xl border border-artisan-border bg-white p-6 shadow-sm">
 				<div class="mb-4 flex items-center gap-2">
-					<svg width="15" height="15" viewBox="0 0 24 24" fill="none" class="text-slate-400">
+					<svg width="15" height="15" viewBox="0 0 24 24" fill="none" class="text-artisan-muted">
 						<path
 							d="M4 6h16M4 12h10M4 18h7"
 							stroke="currentColor"
@@ -201,22 +201,22 @@
 							stroke-linecap="round"
 						/>
 					</svg>
-					<h2 class="text-sm font-semibold text-slate-700">Category</h2>
+					<h2 class="text-sm font-semibold text-artisan-dark">Category</h2>
 				</div>
 				<div class="flex flex-col gap-1.5">
 					<label
 						for="category"
-						class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase"
+						class="text-[11px] font-semibold tracking-widest text-artisan-muted uppercase"
 					>
 						Product Category
 					</label>
 					<select
 						id="category"
 						bind:value={categoryId}
-						class="w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-slate-700 transition outline-none focus:ring-2 focus:ring-slate-100
+						class="w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-artisan-dark transition outline-none focus:ring-2 focus:ring-artisan-active/20
 						{errors.categoryId
 							? 'border-red-300 ring-2 ring-red-100'
-							: 'border-slate-200 focus:border-slate-400'}"
+							: 'border-artisan-border focus:border-artisan-muted'}"
 					>
 						<option value={null}>Pilih kategori...</option>
 						{#each data.categories as cat (cat.id)}
@@ -244,8 +244,8 @@
 			{/if}
 
 			<!-- ─── Save Card ─── -->
-			<div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-				<p class="mb-3 text-xs text-slate-400">
+			<div class="rounded-xl border border-artisan-border bg-white p-5 shadow-sm">
+				<p class="mb-3 text-xs text-artisan-muted">
 					Pastikan semua informasi sudah benar sebelum menyimpan. Data tidak bisa diubah setelah
 					disimpan kecuali diedit manual.
 				</p>
@@ -253,7 +253,7 @@
 					type="button"
 					onclick={handleSubmit}
 					disabled={isSubmitting || submitSuccess}
-					class="flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+					class="flex w-full items-center justify-center gap-2 rounded-lg bg-artisan-primary py-2.5 text-sm font-medium text-artisan-white transition hover:bg-artisan-dark disabled:cursor-not-allowed disabled:opacity-60"
 				>
 					{#if isSubmitting}
 						<Loader size={14} class="animate-spin" />
@@ -267,7 +267,7 @@
 				</button>
 				<a
 					href="/inventory"
-					class="mt-2 flex w-full items-center justify-center rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-500 transition hover:bg-slate-50"
+					class="mt-2 flex w-full items-center justify-center rounded-lg border border-artisan-border py-2.5 text-sm font-medium text-artisan-muted transition hover:bg-artisan-sidebar"
 				>
 					Batal
 				</a>

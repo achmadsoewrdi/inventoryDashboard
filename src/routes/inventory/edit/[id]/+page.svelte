@@ -19,8 +19,6 @@
 	});
 
 	// ─── Form State — pre-filled dari data produk ───
-	// untrack() intentionally snapshots the initial value so edits are local state,
-	// not re-derived on every data change (which would reset user edits).
 	const product = untrack(() => data.product);
 	let name = $state(product.name);
 	let sku = $state(product.sku);
@@ -73,7 +71,13 @@
 				categoryId: categoryId!,
 				supplierId: supplierId!,
 				...(location.warehouseId
-					? { location: { warehouseId: location.warehouseId, aisle: location.aisle, shelf: location.shelf } }
+					? {
+							location: {
+								warehouseId: location.warehouseId,
+								aisle: location.aisle,
+								shelf: location.shelf
+							}
+						}
 					: {})
 			};
 
@@ -85,17 +89,22 @@
 
 			if (!updateRes.ok) {
 				const err = await updateRes.json().catch(() => ({}));
-				throw new Error((err as { message?: string })?.message ?? `Gagal mengupdate produk (${updateRes.status})`);
+				throw new Error(
+					(err as { message?: string })?.message ?? `Gagal mengupdate produk (${updateRes.status})`
+				);
 			}
 
 			// Step 2: Upload gambar baru jika ada (gambar yang sudah ada tidak diubah)
 			for (let i = 0; i < images.length; i++) {
 				const formData = new FormData();
 				formData.append('file', images[i]);
-				await fetch(`${env.PUBLIC_API_URL}/products/${product.id}/images?isPrimary=${product.images.length === 0 && i === 0}`, {
-					method: 'POST',
-					body: formData
-				});
+				await fetch(
+					`${env.PUBLIC_API_URL}/products/${product.id}/images?isPrimary=${product.images.length === 0 && i === 0}`,
+					{
+						method: 'POST',
+						body: formData
+					}
+				);
 			}
 
 			submitSuccess = true;
@@ -113,26 +122,28 @@
 </svelte:head>
 
 <div class="flex flex-col gap-6">
-
 	<!-- ─── Page Header ─── -->
 	<div class="flex items-center justify-between">
 		<div class="flex items-center gap-3">
 			<a
 				href="/inventory"
-				class="flex size-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:text-slate-800"
+				class="flex size-8 items-center justify-center rounded-lg border border-artisan-border bg-white text-artisan-muted shadow-sm transition hover:border-artisan-muted hover:text-artisan-dark"
 			>
 				<ArrowLeft size={15} />
 			</a>
 			<div>
-				<h1 class="text-xl font-bold tracking-tight text-slate-900">Edit Item</h1>
-				<p class="text-sm text-slate-400">Mengedit: <span class="font-medium text-slate-600">{product.name}</span> · <span class="font-mono text-xs">{product.sku}</span></p>
+				<h1 class="text-xl font-bold tracking-tight text-artisan-dark">Edit Item</h1>
+				<p class="text-sm text-artisan-muted">
+					Mengedit: <span class="font-medium text-artisan-dark">{product.name}</span> ·
+					<span class="font-mono text-xs">{product.sku}</span>
+				</p>
 			</div>
 		</div>
 
 		<div class="flex items-center gap-2">
 			<a
 				href="/inventory"
-				class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:bg-slate-50"
+				class="rounded-lg border border-artisan-border bg-white px-4 py-2 text-sm font-medium text-artisan-dark shadow-sm transition hover:bg-artisan-sidebar"
 			>
 				Batal
 			</a>
@@ -140,7 +151,7 @@
 				type="button"
 				onclick={handleSubmit}
 				disabled={isSubmitting || submitSuccess}
-				class="flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+				class="flex items-center gap-2 rounded-lg bg-artisan-primary px-4 py-2 text-sm font-medium text-artisan-white shadow-sm transition hover:bg-artisan-dark disabled:cursor-not-allowed disabled:opacity-60"
 			>
 				{#if isSubmitting}
 					<Loader size={14} class="animate-spin" />
@@ -157,14 +168,18 @@
 
 	<!-- ─── Alerts ─── -->
 	{#if submitError}
-		<div class="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+		<div
+			class="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+		>
 			<AlertCircle size={16} class="mt-0.5 shrink-0 text-red-500" />
 			<span>{submitError}</span>
 		</div>
 	{/if}
 
 	{#if Object.keys(errors).length > 0}
-		<div class="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+		<div
+			class="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700"
+		>
 			<AlertCircle size={16} class="mt-0.5 shrink-0 text-amber-500" />
 			<div>
 				<p class="font-semibold">Harap lengkapi field berikut:</p>
@@ -179,29 +194,38 @@
 
 	<!-- ─── Form Grid ─── -->
 	<div class="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_380px]">
-
 		<!-- Kolom Kiri -->
 		<div class="flex flex-col gap-5">
 			<BasicInformationForm bind:name bind:sku bind:description />
 			<ProductMediaUpload bind:images />
 
 			<!-- Category -->
-			<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+			<div class="rounded-xl border border-artisan-border bg-white p-6 shadow-sm">
 				<div class="mb-4 flex items-center gap-2">
-					<svg width="15" height="15" viewBox="0 0 24 24" fill="none" class="text-slate-400">
-						<path d="M4 6h16M4 12h10M4 18h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+					<svg width="15" height="15" viewBox="0 0 24 24" fill="none" class="text-artisan-muted">
+						<path
+							d="M4 6h16M4 12h10M4 18h7"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+						/>
 					</svg>
-					<h2 class="text-sm font-semibold text-slate-700">Category</h2>
+					<h2 class="text-sm font-semibold text-artisan-dark">Category</h2>
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label for="category" class="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+					<label
+						for="category"
+						class="text-[11px] font-semibold tracking-widest text-artisan-muted uppercase"
+					>
 						Product Category
 					</label>
 					<select
 						id="category"
 						bind:value={categoryId}
-						class="w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-slate-100
-						{errors.categoryId ? 'border-red-300 ring-2 ring-red-100' : 'border-slate-200 focus:border-slate-400'}"
+						class="w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-artisan-dark transition outline-none focus:ring-2 focus:ring-artisan-active/20
+						{errors.categoryId
+							? 'border-red-300 ring-2 ring-red-100'
+							: 'border-artisan-border focus:border-artisan-muted'}"
 					>
 						<option value={null}>Pilih kategori...</option>
 						{#each data.categories as cat (cat.id)}
@@ -229,15 +253,15 @@
 			{/if}
 
 			<!-- Save Card -->
-			<div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-				<p class="mb-3 text-xs text-slate-400">
+			<div class="rounded-xl border border-artisan-border bg-white p-5 shadow-sm">
+				<p class="mb-3 text-xs text-artisan-muted">
 					Perubahan akan langsung disimpan ke database setelah menekan tombol di bawah.
 				</p>
 				<button
 					type="button"
 					onclick={handleSubmit}
 					disabled={isSubmitting || submitSuccess}
-					class="flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-2.5 text-sm font-medium text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+					class="flex w-full items-center justify-center gap-2 rounded-lg bg-artisan-primary py-2.5 text-sm font-medium text-artisan-white transition hover:bg-artisan-dark disabled:cursor-not-allowed disabled:opacity-60"
 				>
 					{#if isSubmitting}
 						<Loader size={14} class="animate-spin" />
@@ -251,7 +275,7 @@
 				</button>
 				<a
 					href="/inventory"
-					class="mt-2 flex w-full items-center justify-center rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-500 transition hover:bg-slate-50"
+					class="mt-2 flex w-full items-center justify-center rounded-lg border border-artisan-border py-2.5 text-sm font-medium text-artisan-muted transition hover:bg-artisan-sidebar"
 				>
 					Batal
 				</a>

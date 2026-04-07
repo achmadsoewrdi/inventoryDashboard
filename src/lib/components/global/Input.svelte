@@ -71,14 +71,14 @@
   const borderClass = $derived(
     error
       ? 'border-red-300 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100'
-      : 'border-stone-200 focus-within:border-stone-400 focus-within:ring-2 focus-within:ring-stone-100'
+      : 'border-artisan-border focus-within:border-artisan-muted focus-within:ring-2 focus-within:ring-artisan-active/20'
   );
 </script>
 
 <div class="flex w-full flex-col gap-1.5">
 
   {#if label}
-    <label for={id} class="text-xs font-medium tracking-wide text-stone-500">
+    <label for={id} class="text-xs font-medium tracking-wide text-artisan-muted">
       {label}
     </label>
   {/if}
@@ -88,20 +88,20 @@
       'relative flex w-full items-center border bg-white transition-all',
       wrapperSize[size],
       borderClass,
-      disabled ? 'cursor-not-allowed bg-stone-50 opacity-60' : '',
+      disabled ? 'cursor-not-allowed bg-artisan-bg opacity-60' : '',
       className
     )}
   >
 
     {#if type === 'search'}
-      <span class="flex shrink-0 items-center pl-3 pr-2 text-stone-400" aria-hidden="true">
+      <span class="flex shrink-0 items-center pl-3 pr-2 text-artisan-muted" aria-hidden="true">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
           <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" />
           <path d="M11 11L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
         </svg>
       </span>
     {:else if leftIcon}
-      <span class="flex shrink-0 items-center pl-3 pr-2 text-stone-400" aria-hidden="true">
+      <span class="flex shrink-0 items-center pl-3 pr-2 text-artisan-muted" aria-hidden="true">
         {@render leftIcon()}
       </span>
     {/if}
@@ -123,7 +123,7 @@
       aria-describedby={error && errorMsg ? `${id}-error` : undefined}
       class="
         h-full min-w-0 flex-1 bg-transparent outline-none
-        placeholder:font-normal placeholder:text-stone-400
+        text-artisan-dark placeholder:font-normal placeholder:text-artisan-muted/60
         disabled:cursor-not-allowed 
         {inputTextSize[size]}
         {hasLeftIcon ? 'pl-0' : 'pl-3'}
@@ -138,14 +138,14 @@
         onclick={handleClear}
         aria-label="Hapus pencarian"
         tabindex="-1"
-        class="mr-2 flex size-6 shrink-0 items-center justify-center rounded-full text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600"
+        class="mr-2 flex size-6 shrink-0 items-center justify-center rounded-full text-artisan-muted transition-colors hover:bg-artisan-sidebar hover:text-artisan-dark"
       >
         <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
           <path d="M2 2L12 12M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
         </svg>
       </button>
     {:else if rightIcon}
-      <span class="flex shrink-0 items-center pl-2 pr-3 text-stone-400" aria-hidden="true">
+      <span class="flex shrink-0 items-center pl-2 pr-3 text-artisan-muted" aria-hidden="true">
         {@render rightIcon()}
       </span>
     {/if}

@@ -19,14 +19,14 @@
 	}: Props = $props();
 </script>
 
-<div class={cn('rounded-xl border border-slate-200 bg-white p-6', className)}>
+<div class={cn('rounded-xl border border-artisan-border bg-white p-6', className)}>
 	<!-- Section Title -->
 	<div class="mb-6 flex items-center gap-2">
-		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-slate-400">
+		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-artisan-muted">
 			<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
 			<path d="M12 8v4M12 16v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
 		</svg>
-		<h2 class="text-sm font-semibold text-slate-700">Basic Information</h2>
+		<h2 class="text-sm font-semibold text-artisan-dark">Basic Information</h2>
 	</div>
 
 	<!-- Product Name + SKU -->
@@ -34,7 +34,7 @@
 		<div class="flex flex-col gap-1.5">
 			<label
 				for="product-name"
-				class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase"
+				class="text-[11px] font-semibold tracking-widest text-artisan-muted uppercase"
 			>
 				Product Name
 			</label>
@@ -43,15 +43,15 @@
 				bind:value={name}
 				placeholder="e.g. Hand-Carved Oak Chair"
 				size="md"
-				class="bg-[#F4F4EE]"
+				class="bg-artisan-bg"
 			/>
 		</div>
 
 		<div class="flex flex-col gap-1.5">
-			<label for="sku" class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase">
+			<label for="sku" class="text-[11px] font-semibold tracking-widest text-artisan-muted uppercase">
 				SKU / Identifier
 			</label>
-			<Input id="sku" bind:value={sku} placeholder="ART-OK-001" size="md" class="bg-[#F4F4EE]" />
+			<Input id="sku" bind:value={sku} placeholder="ART-OK-001" size="md" class="bg-artisan-bg" />
 		</div>
 	</div>
 
@@ -59,7 +59,7 @@
 	<div class="flex flex-col gap-1.5">
 		<label
 			for="description"
-			class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase"
+			class="text-[11px] font-semibold tracking-widest text-artisan-muted uppercase"
 		>
 			Description & Notes
 		</label>
@@ -68,7 +68,7 @@
 			bind:value={description}
 			placeholder="Detailed product specifications, material origin, and handling instructions..."
 			rows={5}
-			class="w-full resize-none rounded-lg border border-slate-200 bg-[#F4F4EE] px-3 py-2.5 text-sm text-slate-700 transition-all outline-none placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
+			class="w-full resize-none rounded-lg border border-artisan-border bg-artisan-bg px-3 py-2.5 text-sm text-artisan-dark transition-all outline-none placeholder:text-artisan-muted/60 focus:border-artisan-muted focus:ring-2 focus:ring-artisan-active/20"
 		></textarea>
 	</div>
 </div>

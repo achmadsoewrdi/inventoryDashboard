@@ -54,8 +54,8 @@
 	<div
 		class={cn(
 			'flex size-4 shrink-0 items-center justify-center rounded border transition-all',
-			isActive ? 'border-stone-800 bg-stone-800' : 'border-stone-300 bg-white',
-			!disabled && !isActive && 'group-hover:border-stone-500'
+			isActive ? 'border-artisan-primary bg-artisan-primary' : 'border-artisan-border bg-white',
+			!disabled && !isActive && 'group-hover:border-artisan-muted'
 		)}
 	>
 		{#if indeterminate}
@@ -76,6 +76,6 @@
 	</div>
 
 	{#if label}
-		<span class="text-sm text-stone-700">{label}</span>
+		<span class="text-sm text-artisan-dark">{label}</span>
 	{/if}
 </label>

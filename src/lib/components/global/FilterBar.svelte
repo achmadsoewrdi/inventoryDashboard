@@ -91,7 +91,7 @@
 		</div>
 
 		<!-- Tabs -->
-		<div class="flex items-center rounded-lg border border-stone-200 bg-white p-0.5">
+		<div class="flex items-center rounded-lg border border-artisan-border bg-white p-0.5">
 			{#each tabs as tab (tab.id)}
 				<button
 					type="button"
@@ -99,8 +99,8 @@
 					class={cn(
 						'rounded-md px-4 py-1.5 text-sm font-medium transition-all',
 						filter.tab === tab.id
-							? 'bg-stone-800 text-white shadow-sm'
-							: 'text-stone-500 hover:text-stone-700'
+							? 'bg-artisan-primary text-artisan-white shadow-sm'
+							: 'text-artisan-muted hover:text-artisan-dark'
 					)}
 				>
 					{tab.label}
@@ -117,7 +117,7 @@
 			<select
 				value={filter.category ?? 'all'}
 				onchange={setCategory}
-				class="h-9 rounded-lg border border-stone-200 bg-white px-3 text-sm text-stone-600 transition-all outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-100"
+				class="h-9 rounded-lg border border-artisan-border bg-white px-3 text-sm text-artisan-dark transition-all outline-none focus:border-artisan-muted focus:ring-2 focus:ring-artisan-active/20"
 			>
 				<option value="all">All Categories</option>
 				{#each categories as cat (cat)}
@@ -129,7 +129,7 @@
 			<select
 				value={filter.warehouseId ?? 'all'}
 				onchange={setWarehouse}
-				class="h-9 rounded-lg border border-stone-200 bg-white px-3 text-sm text-stone-600 transition-all outline-none focus:border-stone-400 focus:ring-2 focus:ring-stone-100"
+				class="h-9 rounded-lg border border-artisan-border bg-white px-3 text-sm text-artisan-dark transition-all outline-none focus:border-artisan-muted focus:ring-2 focus:ring-artisan-active/20"
 			>
 				<option value="all">Warehouse: All</option>
 				{#each warehouses as wh (wh.id)}
@@ -138,8 +138,8 @@
 			</select>
 
 			<!-- Updated Range -->
-			<div class="flex h-9 items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-3">
-				<svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="shrink-0 text-stone-400">
+			<div class="flex h-9 items-center gap-1.5 rounded-lg border border-artisan-border bg-white px-3">
+				<svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="shrink-0 text-artisan-muted">
 					<rect
 						x="2"
 						y="3"
@@ -156,7 +156,7 @@
 					type="text"
 					placeholder="Updated Range"
 					readonly
-					class="w-28 bg-transparent text-sm text-stone-600 outline-none placeholder:text-stone-400"
+					class="w-28 bg-transparent text-sm text-artisan-dark outline-none placeholder:text-artisan-muted"
 				/>
 			</div>
 
@@ -164,7 +164,7 @@
 			<button
 				type="button"
 				onclick={handleReset}
-				class="flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-stone-500 transition-colors hover:bg-stone-100 hover:text-stone-700"
+				class="flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-artisan-muted transition-colors hover:bg-artisan-sidebar hover:text-artisan-dark"
 			>
 				<RotateCcw size={13} />
 				Reset
@@ -182,8 +182,8 @@
 					class={cn(
 						'flex h-9 items-center gap-2 rounded-lg px-4 text-sm font-medium transition-all',
 						selectedCount > 0
-							? 'bg-stone-800 text-white hover:bg-stone-700'
-							: 'cursor-not-allowed bg-stone-800/50 text-white/70'
+							? 'bg-artisan-primary text-artisan-white hover:bg-artisan-dark'
+							: 'cursor-not-allowed bg-artisan-primary/40 text-artisan-white/70'
 					)}
 				>
 					Bulk Action
@@ -197,15 +197,15 @@
 
 				{#if bulkOpen && selectedCount > 0}
 					<div
-						class="absolute top-full right-0 z-50 mt-1 w-44 overflow-hidden rounded-lg border border-stone-200 bg-white shadow-lg"
+						class="absolute top-full right-0 z-50 mt-1 w-44 overflow-hidden rounded-lg border border-artisan-border bg-white shadow-lg"
 					>
 						{#each bulkActions as action (action.id)}
 							<button
 								type="button"
 								onclick={() => handleBulkAction(action.id)}
 								class={cn(
-									'flex w-full items-center px-4 py-2.5 text-left text-sm transition-colors hover:bg-stone-50',
-									action.destructive ? 'text-red-500 hover:bg-red-50' : 'text-stone-700'
+									'flex w-full items-center px-4 py-2.5 text-left text-sm transition-colors hover:bg-artisan-sidebar',
+									action.destructive ? 'text-red-500 hover:bg-red-50' : 'text-artisan-dark'
 								)}
 							>
 								{action.label}
@@ -220,7 +220,7 @@
 				type="button"
 				onclick={onExport}
 				aria-label="Export"
-				class="flex size-9 items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-500 transition-colors hover:bg-stone-50 hover:text-stone-700"
+				class="flex size-9 items-center justify-center rounded-lg border border-artisan-border bg-white text-artisan-muted transition-colors hover:bg-artisan-sidebar hover:text-artisan-dark"
 			>
 				<Download size={15} />
 			</button>

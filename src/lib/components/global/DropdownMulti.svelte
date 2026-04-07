@@ -52,29 +52,29 @@
 		onclick={() => { if (!disabled) open = !open; }}
 		class={cn(
 			'flex min-h-9 w-full flex-wrap items-center gap-1 rounded-md border px-2 py-1.5 text-sm transition-colors',
-			'border-stone-200 bg-white hover:border-stone-400',
-			open && 'border-stone-400',
+			'border-artisan-border bg-white hover:border-artisan-muted',
+			open && 'border-artisan-muted',
 			disabled && 'cursor-not-allowed opacity-50'
 		)}
 	>
 		{#if selectedOptions.length === 0}
-			<span class="px-1 text-stone-400">{placeholder}</span>
+			<span class="px-1 text-artisan-muted">{placeholder}</span>
 		{:else}
 			{#each selectedOptions as opt (opt.value)}
-				<span class="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-stone-100 px-2 py-0.5 text-xs text-stone-700">
+				<span class="inline-flex items-center gap-1 rounded-full border border-artisan-border bg-artisan-sidebar px-2 py-0.5 text-xs text-artisan-dark">
 					{opt.label}
 					<span
 						role="button"
 						tabindex="0"
 						onclick={(e) => remove(opt.value, e)}
 						onkeydown={(e) => e.key === 'Enter' && remove(opt.value, e as unknown as MouseEvent)}
-						class="cursor-pointer text-stone-400 hover:text-stone-700"
+						class="cursor-pointer text-artisan-muted hover:text-artisan-dark"
 					>✕</span>
 				</span>
 			{/each}
 		{/if}
 		<svg
-			class={cn('ml-auto size-4 shrink-0 text-stone-400 transition-transform', open && 'rotate-180')}
+			class={cn('ml-auto size-4 shrink-0 text-artisan-muted transition-transform', open && 'rotate-180')}
 			viewBox="0 0 16 16"
 			fill="none"
 		>
@@ -89,23 +89,23 @@
 	</button>
 
 	{#if open}
-		<div class="absolute z-50 mt-1 w-full rounded-md border border-stone-200 bg-white shadow-sm">
+		<div class="absolute z-50 mt-1 w-full rounded-md border border-artisan-border bg-white shadow-sm">
 			<div class="max-h-48 overflow-y-auto">
 				{#each options as option (option.value)}
 					<button
 						type="button"
 						onclick={() => toggle(option)}
 						class={cn(
-							'flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-stone-700 hover:bg-stone-50',
-							value.includes(option.value) && 'bg-stone-50 font-medium'
+							'flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-artisan-dark hover:bg-artisan-sidebar',
+							value.includes(option.value) && 'bg-artisan-sidebar font-medium'
 						)}
 					>
 						<div
 							class={cn(
 								'flex size-4 shrink-0 items-center justify-center rounded border transition-all',
 								value.includes(option.value)
-									? 'border-stone-800 bg-stone-800'
-									: 'border-stone-300 bg-white'
+									? 'border-artisan-primary bg-artisan-primary'
+									: 'border-artisan-border bg-white'
 							)}
 						>
 							{#if value.includes(option.value)}

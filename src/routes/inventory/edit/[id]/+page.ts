@@ -13,10 +13,11 @@ export const load: PageLoad = async ({ fetch, params }) => {
 	const id = Number(params.id);
 	if (isNaN(id)) throw error(400, 'ID produk tidak valid');
 
-	// Fetch produk by ID + semua produk untuk extract dropdown options (paralel)
-	const [productRes, listRes] = await Promise.all([
+	// Fetch data
+	const [productRes, listRes, categoriesRes] = await Promise.all([
 		fetch(`${env.PUBLIC_API_URL}/products/${id}`),
-		fetch(`${env.PUBLIC_API_URL}/products?limit=100`)
+		fetch(`${env.PUBLIC_API_URL}/products?limit=100`),
+		fetch(`${env.PUBLIC_API_URL}/categories`)
 	]);
 
 	if (!productRes.ok) {
@@ -29,18 +30,24 @@ export const load: PageLoad = async ({ fetch, params }) => {
 	// Extract unique dropdown options dari product list
 	const supplierMap = new Map<number, SupplierResponse>();
 	const warehouseMap = new Map<number, WarehouseResponse>();
-	const categoryMap = new Map<number, CategoryResponse>();
 
 	for (const p of list.data) {
 		if (p.supplier) supplierMap.set(p.supplier.id, p.supplier);
 		if (p.location?.warehouse) warehouseMap.set(p.location.warehouse.id, p.location.warehouse);
-		if (p.category) categoryMap.set(p.category.id, p.category);
 	}
+
+	const rawCategories: CategoryResponse[] = categoriesRes.ok ? await categoriesRes.json() : [];
+	const seen = new Set<string>();
+	const categories = rawCategories.filter((c) => {
+		if (seen.has(c.name)) return false;
+		seen.add(c.name);
+		return true;
+	});
 
 	return {
 		product,
 		suppliers: [...supplierMap.values()],
 		warehouses: [...warehouseMap.values()],
-		categories: [...categoryMap.values()]
+		categories: categories.sort((a, b) => a.name.localeCompare(b.name))
 	};
 };

@@ -68,16 +68,16 @@
 		onclick={toggle}
 		class={cn(
 			'flex h-9 w-full items-center justify-between rounded-md border px-3 text-sm transition-colors',
-			'border-stone-200 bg-white hover:border-stone-400',
-			open && 'border-stone-400',
+			'border-artisan-border bg-white hover:border-artisan-muted',
+			open && 'border-artisan-muted',
 			disabled && 'cursor-not-allowed opacity-50'
 		)}
 	>
-		<span class={cn('truncate', selectedLabel ? 'text-stone-800' : 'text-stone-400')}>
+		<span class={cn('truncate', selectedLabel ? 'text-artisan-dark' : 'text-artisan-muted')}>
 			{selectedLabel ?? placeholder}
 		</span>
 		<svg
-			class={cn('ml-2 size-4 shrink-0 text-stone-400 transition-transform', open && 'rotate-180')}
+			class={cn('ml-2 size-4 shrink-0 text-artisan-muted transition-transform', open && 'rotate-180')}
 			viewBox="0 0 16 16"
 			fill="none"
 		>
@@ -92,33 +92,33 @@
 	</button>
 
 	{#if open}
-		<div class="absolute z-50 mt-1 w-full rounded-md border border-stone-200 bg-white shadow-sm">
+		<div class="absolute z-50 mt-1 w-full rounded-md border border-artisan-border bg-white shadow-sm">
 			{#if searchable}
-				<div class="border-b border-stone-100 p-2">
+				<div class="border-b border-artisan-border/50 p-2">
 					<input
 						type="text"
 						bind:value={searchQuery}
 						placeholder="Cari..."
 						onclick={(e) => e.stopPropagation()}
-						class="w-full rounded border border-stone-200 bg-stone-50 px-2 py-1.5 text-sm outline-none focus:border-stone-400"
+						class="w-full rounded border border-artisan-border bg-artisan-bg px-2 py-1.5 text-sm outline-none focus:border-artisan-muted"
 					/>
 				</div>
 			{/if}
 			<div class="max-h-48 overflow-y-auto">
 				{#if filtered.length === 0}
-					<p class="px-3 py-2 text-sm text-stone-400">Tidak ditemukan</p>
+					<p class="px-3 py-2 text-sm text-artisan-muted">Tidak ditemukan</p>
 				{:else}
 					{#each filtered as option (option.value)}
 						<button
 							type="button"
 							onclick={() => select(option)}
 							class={cn(
-								'flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-stone-700 transition-colors hover:bg-stone-50',
-								value === option.value && 'bg-stone-50 font-medium'
+								'flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-artisan-dark transition-colors hover:bg-artisan-sidebar',
+								value === option.value && 'bg-artisan-sidebar font-medium'
 							)}
 						>
 							<svg
-								class={cn('size-3.5 shrink-0 text-stone-800', value !== option.value && 'invisible')}
+								class={cn('size-3.5 shrink-0 text-artisan-primary', value !== option.value && 'invisible')}
 								viewBox="0 0 14 14"
 								fill="none"
 							>

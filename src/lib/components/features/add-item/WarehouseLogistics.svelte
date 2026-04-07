@@ -55,10 +55,10 @@
 
 <svelte:window onclick={handleOutsideClick} />
 
-<div class={cn('rounded-xl border border-slate-200 bg-slate-50 p-6', className)}>
+<div class={cn('rounded-xl border border-artisan-border bg-white p-6', className)}>
 	<!-- Section Title -->
 	<div class="mb-5 flex items-center gap-2">
-		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-slate-400">
+		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-artisan-muted">
 			<path
 				d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
 				stroke="currentColor"
@@ -67,7 +67,7 @@
 			/>
 			<circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5" />
 		</svg>
-		<h2 class="text-sm font-semibold text-slate-700">Warehouse Logistics</h2>
+		<h2 class="text-sm font-semibold text-artisan-dark">Warehouse Logistics</h2>
 	</div>
 
 	<div class="flex flex-col gap-4">
@@ -75,7 +75,7 @@
 		<div class="flex flex-col gap-1.5">
 			<span
 				id="supplier-label"
-				class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase"
+				class="text-[11px] font-semibold tracking-widest text-artisan-muted uppercase"
 			>
 				Supplier Name
 			</span>
@@ -87,38 +87,41 @@
 					class={cn(
 						'flex w-full items-center justify-between rounded-lg border bg-white px-3 py-2.5 text-left text-sm transition-all',
 						supplierOpen
-							? 'border-slate-400 ring-2 ring-slate-100'
-							: 'border-slate-200 hover:border-slate-300'
+							? 'border-artisan-muted ring-2 ring-artisan-active/20'
+							: 'border-artisan-border hover:border-artisan-muted'
 					)}
 				>
-					<span class={selectedSupplier ? 'text-slate-700' : 'text-slate-400'}>
+					<span class={selectedSupplier ? 'text-artisan-dark' : 'text-artisan-muted'}>
 						{selectedSupplier?.name ?? 'Pilih supplier...'}
 					</span>
 					<ChevronDown
 						size={14}
-						class={cn('shrink-0 text-slate-400 transition-transform', supplierOpen && 'rotate-180')}
+						class={cn(
+							'shrink-0 text-artisan-muted transition-transform',
+							supplierOpen && 'rotate-180'
+						)}
 					/>
 				</button>
 
 				{#if supplierOpen}
 					<div
-						class="absolute top-full left-0 z-50 mt-1 w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg"
+						class="absolute top-full left-0 z-50 mt-1 w-full overflow-hidden rounded-lg border border-artisan-border bg-white shadow-lg"
 					>
 						{#if suppliers.length === 0}
-							<div class="px-4 py-3 text-sm text-slate-400">Tidak ada supplier tersedia</div>
+							<div class="px-4 py-3 text-sm text-artisan-muted">Tidak ada supplier tersedia</div>
 						{:else}
 							{#each suppliers as supplier (supplier.id)}
 								<button
 									type="button"
 									onclick={() => selectSupplier(supplier.id)}
 									class={cn(
-										'flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-slate-50',
-										supplierId === supplier.id ? 'text-slate-800' : 'text-slate-600'
+										'flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-artisan-sidebar',
+										supplierId === supplier.id ? 'text-artisan-dark' : 'text-artisan-muted'
 									)}
 								>
 									<span>{supplier.name}</span>
 									{#if supplierId === supplier.id}
-										<Check size={13} class="text-slate-800" />
+										<Check size={13} class="text-artisan-primary" />
 									{/if}
 								</button>
 							{/each}
@@ -132,7 +135,7 @@
 		<div class="flex flex-col gap-1.5">
 			<span
 				id="warehouse-label"
-				class="text-[11px] font-semibold tracking-widest text-slate-400 uppercase"
+				class="text-[11px] font-semibold tracking-widest text-artisan-muted uppercase"
 			>
 				Lokasi Gudang
 			</span>
@@ -146,17 +149,17 @@
 					class={cn(
 						'flex w-full items-center justify-between rounded-lg border bg-white px-3 py-2.5 text-left text-sm transition-all',
 						warehouseOpen
-							? 'border-slate-400 ring-2 ring-slate-100'
-							: 'border-slate-200 hover:border-slate-300'
+							? 'border-artisan-muted ring-2 ring-artisan-active/20'
+							: 'border-artisan-border hover:border-artisan-muted'
 					)}
 				>
-					<span class={selectedWarehouse ? 'text-slate-700' : 'text-slate-400'}>
+					<span class={selectedWarehouse ? 'text-artisan-dark' : 'text-artisan-muted'}>
 						{selectedWarehouse?.name ?? 'Pilih gudang...'}
 					</span>
 					<ChevronDown
 						size={14}
 						class={cn(
-							'shrink-0 text-slate-400 transition-transform',
+							'shrink-0 text-artisan-muted transition-transform',
 							warehouseOpen && 'rotate-180'
 						)}
 					/>
@@ -164,23 +167,25 @@
 
 				{#if warehouseOpen}
 					<div
-						class="absolute top-full left-0 z-50 mt-1 w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg"
+						class="absolute top-full left-0 z-50 mt-1 w-full overflow-hidden rounded-lg border border-artisan-border bg-white shadow-lg"
 					>
 						{#if warehouses.length === 0}
-							<div class="px-4 py-3 text-sm text-slate-400">Tidak ada gudang tersedia</div>
+							<div class="px-4 py-3 text-sm text-artisan-muted">Tidak ada gudang tersedia</div>
 						{:else}
 							{#each warehouses as warehouse (warehouse.id)}
 								<button
 									type="button"
 									onclick={() => selectWarehouse(warehouse.id)}
 									class={cn(
-										'flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-slate-50',
-										location.warehouseId === warehouse.id ? 'text-slate-800' : 'text-slate-600'
+										'flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-artisan-sidebar',
+										location.warehouseId === warehouse.id
+											? 'text-artisan-dark'
+											: 'text-artisan-muted'
 									)}
 								>
 									<span>{warehouse.name}</span>
 									{#if location.warehouseId === warehouse.id}
-										<Check size={13} class="text-slate-800" />
+										<Check size={13} class="text-artisan-primary" />
 									{/if}
 								</button>
 							{/each}
@@ -192,7 +197,7 @@
 			<!-- Zona + Nomor Rak -->
 			<div class="grid grid-cols-2 gap-2">
 				<div class="flex flex-col gap-1">
-					<label for="location-aisle" class="text-[11px] font-medium text-slate-400">
+					<label for="location-aisle" class="text-[11px] font-medium text-artisan-muted">
 						Zona / Lorong
 					</label>
 					<input
@@ -200,11 +205,11 @@
 						type="text"
 						bind:value={location.aisle}
 						placeholder="Contoh: A, B, C"
-						class="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 transition-all outline-none placeholder:text-slate-300 focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
+						class="rounded-lg border border-artisan-border bg-white px-3 py-2.5 text-sm text-artisan-dark transition-all outline-none placeholder:text-artisan-muted/60 focus:border-artisan-muted focus:ring-2 focus:ring-artisan-active/20"
 					/>
 				</div>
 				<div class="flex flex-col gap-1">
-					<label for="location-shelf" class="text-[11px] font-medium text-slate-400">
+					<label for="location-shelf" class="text-[11px] font-medium text-artisan-muted">
 						Nomor Rak
 					</label>
 					<input
@@ -212,20 +217,20 @@
 						type="text"
 						bind:value={location.shelf}
 						placeholder="Contoh: 1, 2, 3"
-						class="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 transition-all outline-none placeholder:text-slate-300 focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
+						class="rounded-lg border border-artisan-border bg-white px-3 py-2.5 text-sm text-artisan-dark transition-all outline-none placeholder:text-artisan-muted/60 focus:border-artisan-muted focus:ring-2 focus:ring-artisan-active/20"
 					/>
 				</div>
 			</div>
 
 			<!-- Preview lokasi gabungan -->
 			{#if locationPreview()}
-				<div class="mt-1 flex items-center gap-1.5 rounded-md bg-slate-100 px-3 py-2">
+				<div class="mt-1 flex items-center gap-1.5 rounded-md bg-artisan-bg px-3 py-2">
 					<svg
 						width="12"
 						height="12"
 						viewBox="0 0 24 24"
 						fill="none"
-						class="shrink-0 text-slate-400"
+						class="shrink-0 text-artisan-muted"
 					>
 						<path
 							d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
@@ -235,8 +240,8 @@
 						/>
 						<circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5" />
 					</svg>
-					<span class="text-xs text-slate-500">
-						Lokasi: <span class="font-semibold text-slate-700">{locationPreview()}</span>
+					<span class="text-xs text-artisan-muted">
+						Lokasi: <span class="font-semibold text-artisan-dark">{locationPreview()}</span>
 					</span>
 				</div>
 			{/if}

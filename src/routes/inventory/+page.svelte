@@ -118,12 +118,11 @@
 	}
 </script>
 
-
 <svelte:head>
 	<title>Inventory | Artisan Ops</title>
 </svelte:head>
 
-<div class="flex flex-col gap-6 p-6">
+<div class="flex flex-col gap-6">
 	<FilterBar
 		bind:filter={filterData}
 		categories={categoriesList}

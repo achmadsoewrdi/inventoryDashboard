@@ -12,15 +12,15 @@
 	const config: Record<StockStatus, { label: string; class: string }> = {
 		'IN_STOCK': {
 			label: 'In Stock',
-			class: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+			class: '[background-color:var(--color-status-in-stock-bg)] [color:var(--color-status-in-stock-text)] ring-1 ring-emerald-200'
 		},
 		'LOW_STOCK': {
 			label: 'Low Stock',
-			class: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'
+			class: '[background-color:var(--color-status-low-bg)] [color:var(--color-status-low-text)] ring-1 ring-amber-200'
 		},
 		'OUT_OF_STOCK': {
 			label: 'Out',
-			class: 'bg-red-50 text-red-500 ring-1 ring-red-200'
+			class: '[background-color:var(--color-status-out-bg)] [color:var(--color-status-out-text)] ring-1 ring-red-200'
 		}
 	};
 

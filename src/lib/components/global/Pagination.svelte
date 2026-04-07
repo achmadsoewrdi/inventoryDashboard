@@ -34,10 +34,10 @@
 
 <div class={cn('flex items-center justify-between', className)}>
 	<!-- Kiri: info halaman -->
-	<span class="text-sm text-stone-500">
+	<span class="text-sm text-artisan-muted">
 		PAGE {currentPage} OF {totalPages}
 		{#if totalItems > 0}
-			<span class="ml-2 text-stone-400">({perPage} per page)</span>
+			<span class="ml-2 text-artisan-muted/60">({perPage} per page)</span>
 		{/if}
 	</span>
 
@@ -48,8 +48,8 @@
 			onclick={prev}
 			disabled={currentPage <= 1}
 			class={cn(
-				'h-9 rounded-md border border-stone-300 px-4 text-sm text-stone-600 transition-colors',
-				'hover:bg-stone-50 hover:border-stone-400',
+				'h-9 rounded-md border border-artisan-border px-4 text-sm text-artisan-dark transition-colors',
+				'hover:bg-artisan-sidebar hover:border-artisan-muted',
 				'disabled:cursor-not-allowed disabled:opacity-40'
 			)}
 		>
@@ -61,8 +61,8 @@
 			onclick={next}
 			disabled={currentPage >= totalPages}
 			class={cn(
-				'h-9 rounded-md border border-stone-800 bg-stone-800 px-4 text-sm text-white transition-colors',
-				'hover:bg-stone-700 hover:border-stone-700',
+				'h-9 rounded-md border border-artisan-primary bg-artisan-primary px-4 text-sm text-artisan-white transition-colors',
+				'hover:bg-artisan-dark hover:border-artisan-dark',
 				'disabled:cursor-not-allowed disabled:opacity-40'
 			)}
 		>

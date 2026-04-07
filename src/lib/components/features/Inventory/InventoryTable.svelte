@@ -36,10 +36,10 @@
 	}
 </script>
 
-<div class="w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-	<div class="flex items-center justify-between border-b border-slate-100 p-4">
-		<h3 class="text-sm font-semibold tracking-wider text-slate-800 uppercase">
-			Master Inventory List <span class="ml-1 font-normal text-slate-400 normal-case"
+<div class="w-full overflow-hidden rounded-xl border border-artisan-border bg-white shadow-sm">
+	<div class="flex items-center justify-between border-b border-artisan-border/60 p-4">
+		<h3 class="text-sm font-semibold tracking-wider text-artisan-dark uppercase">
+			Master Inventory List <span class="ml-1 font-normal text-artisan-muted normal-case"
 				>({items.length} items)</span
 			>
 		</h3>
@@ -48,8 +48,8 @@
 
 	<div class="overflow-x-auto">
 		<table class="w-full border-collapse text-left">
-			<thead class="bg-slate-50/50">
-				<tr class="border-b border-slate-100">
+			<thead class="bg-artisan-bg">
+				<tr class="border-b border-artisan-border">
 					<th class="w-12 p-4 text-center">
 						<Chekbox
 							checked={isAllSelected}
@@ -57,18 +57,18 @@
 							onChange={toggleSelectAll}
 						/>
 					</th>
-					<th class="p-4 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+					<th class="p-4 text-xs font-semibold tracking-wider text-artisan-muted uppercase">
 						Product
 					</th>
-					<th class="p-4 text-xs font-semibold tracking-wider text-slate-500 uppercase"> SKU </th>
-					<th class="p-4 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+					<th class="p-4 text-xs font-semibold tracking-wider text-artisan-muted uppercase"> SKU </th>
+					<th class="p-4 text-xs font-semibold tracking-wider text-artisan-muted uppercase">
 						Category
 					</th>
-					<th class="p-4 text-xs font-semibold tracking-wider text-slate-500 uppercase"> Stock </th>
-					<th class="p-4 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+					<th class="p-4 text-xs font-semibold tracking-wider text-artisan-muted uppercase"> Stock </th>
+					<th class="p-4 text-xs font-semibold tracking-wider text-artisan-muted uppercase">
 						Status
 					</th>
-					<th class="p-4 text-center text-xs font-semibold tracking-wider text-slate-500 uppercase">
+					<th class="p-4 text-center text-xs font-semibold tracking-wider text-artisan-muted uppercase">
 						Actions
 					</th>
 				</tr>
@@ -84,7 +84,7 @@
 					/>
 				{:else}
 					<tr>
-						<td colspan="7" class="p-8 text-center text-slate-400"> No items found </td>
+						<td colspan="7" class="p-8 text-center text-artisan-muted"> No items found </td>
 					</tr>
 				{/each}
 			</tbody>

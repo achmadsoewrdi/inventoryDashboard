@@ -1,3 +1,8 @@
+<script module>
+	// Shared across all row instances — hanya satu menu yang boleh terbuka
+	let activeItemId = $state<number | null>(null);
+</script>
+
 <script lang="ts">
 	import type { InventoryItem } from '$lib/types/types';
 	import Badge from '$lib/components/global/Badge.svelte';
@@ -17,7 +22,7 @@
 
 	let { item, selected = false, onToggleSelection, onView, onEdit, onDelete }: Props = $props();
 
-	let menuOpen = $state(false);
+	let menuOpen = $derived(activeItemId === item.id);
 	let btnEl = $state<HTMLButtonElement | null>(null);
 	let menuPos = $state({ top: 0, left: 0 });
 
@@ -28,16 +33,21 @@
 	function toggleMenu(e: MouseEvent) {
 		e.stopPropagation();
 
-		if (!menuOpen && btnEl) {
+		if (activeItemId === item.id) {
+			// Tutup menu jika sudah terbuka
+			activeItemId = null;
+		} else {
 			// Hitung posisi button relatif ke viewport
-			const rect = btnEl.getBoundingClientRect();
-			menuPos = {
-				top: rect.bottom + window.scrollY + 4,
-				left: rect.right + window.scrollX - 160 // 160 = lebar menu (w-40)
-			};
+			if (btnEl) {
+				const rect = btnEl.getBoundingClientRect();
+				menuPos = {
+					top: rect.bottom + window.scrollY + 4,
+					left: rect.right + window.scrollX - 160 // 160 = lebar menu (w-40)
+				};
+			}
+			// Set ke ID ini — otomatis menutup menu row lain
+			activeItemId = item.id;
 		}
-
-		menuOpen = !menuOpen;
 	}
 
 	function handleAction(fn?: () => void) {
@@ -46,8 +56,8 @@
 	}
 
 	function handleOutsideClick(e: MouseEvent) {
-		if (btnEl && !btnEl.contains(e.target as Node)) {
-			menuOpen = false;
+		if (activeItemId === item.id && btnEl && !btnEl.contains(e.target as Node)) {
+			activeItemId = null;
 		}
 	}
 </script>
@@ -59,27 +69,27 @@
 	<div
 		role="menu"
 		style="position: fixed; top: {menuPos.top}px; left: {menuPos.left}px; z-index: 9999;"
-		class="w-40 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg"
+		class="w-40 overflow-hidden rounded-lg border border-artisan-border bg-white shadow-lg"
 	>
 		<button
 			type="button"
 			onclick={() => handleAction(() => onView?.(item))}
-			class="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-slate-50"
+			class="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-artisan-dark transition-colors hover:bg-artisan-sidebar"
 		>
-			<Eye size={14} class="text-slate-400" />
+			<Eye size={14} class="text-artisan-muted" />
 			View Detail
 		</button>
 
 		<button
 			type="button"
 			onclick={() => handleAction(() => onEdit?.(item))}
-			class="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-slate-50"
+			class="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-artisan-dark transition-colors hover:bg-artisan-sidebar"
 		>
-			<Pencil size={14} class="text-slate-400" />
+			<Pencil size={14} class="text-artisan-muted" />
 			Edit
 		</button>
 
-		<div class="mx-3 border-t border-slate-100"></div>
+		<div class="mx-3 border-t border-artisan-border"></div>
 
 		<button
 			type="button"
@@ -92,7 +102,7 @@
 	</div>
 {/if}
 
-<tr class="border-b border-slate-100 transition-colors last:border-b-0 hover:bg-slate-50">
+<tr class="border-b border-artisan-border/50 transition-colors last:border-b-0 hover:bg-artisan-bg">
 	<!-- Checkbox -->
 	<td class="w-12 p-4 text-center">
 		<Chekbox checked={selected} onChange={handleSelection} />
@@ -105,11 +115,11 @@
 				<img
 					src={item.imageUrl}
 					alt={item.name}
-					class="h-10 w-10 rounded-md bg-slate-100 object-cover"
+					class="h-10 w-10 rounded-md bg-artisan-sidebar object-cover"
 				/>
 			{:else}
 				<div
-					class="flex h-10 w-10 items-center justify-center rounded-md bg-slate-100 text-slate-400"
+					class="flex h-10 w-10 items-center justify-center rounded-md bg-artisan-sidebar text-artisan-muted"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -130,27 +140,27 @@
 				</div>
 			{/if}
 			<div>
-				<div class="font-medium text-slate-900">{item.name}</div>
+				<div class="font-medium text-artisan-dark">{item.name}</div>
 			</div>
 		</div>
 	</td>
 
 	<!-- SKU -->
-	<td class="p-4 text-sm text-slate-600">
+	<td class="p-4 text-sm text-artisan-muted">
 		{item.sku}
 	</td>
 
 	<!-- Category -->
-	<td class="p-4 text-sm text-slate-600">
+	<td class="p-4 text-sm text-artisan-dark">
 		<div>{item.category}</div>
-		<div class="text-xs text-slate-400">{item.subCategory}</div>
+		<div class="text-xs text-artisan-muted">{item.subCategory}</div>
 	</td>
 
 	<!-- Stock -->
 	<td class="p-4">
 		<div class="flex items-center gap-2">
-			<span class="text-sm font-medium text-slate-900">{item.currentStock}</span>
-			<span class="text-xs text-slate-500">/ {item.stockThreshold}</span>
+			<span class="text-sm font-medium text-artisan-dark">{item.currentStock}</span>
+			<span class="text-xs text-artisan-muted">/ {item.stockThreshold}</span>
 		</div>
 	</td>
 
@@ -166,8 +176,8 @@
 			type="button"
 			onclick={toggleMenu}
 			class={cn(
-				'rounded-lg p-2 transition-colors hover:bg-slate-100 hover:text-slate-700',
-				menuOpen ? 'bg-slate-100 text-slate-700' : 'text-slate-400'
+				'rounded-lg p-2 transition-colors hover:bg-artisan-sidebar hover:text-artisan-dark',
+				menuOpen ? 'bg-artisan-sidebar text-artisan-dark' : 'text-artisan-muted'
 			)}
 			aria-label="Row actions"
 		>
