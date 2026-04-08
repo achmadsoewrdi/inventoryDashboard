@@ -13,45 +13,35 @@
 	import { toInventoryItem } from '$lib/types/types';
 	import { env } from '$env/dynamic/public';
 
-	// Mengambil data dari +page.ts
 	let { data } = $props();
 	let items = $state<InventoryItem[]>([]);
 
-	// Gunakan effect.pre agar sinkron sebelum render jika data products ada
 	$effect.pre(() => {
 		if (data?.products) {
 			items = data.products;
 		}
 	});
 
-	// ==== PAGINATION ====
 	const PER_PAGE = 5;
 	let currentPage = $state(1);
 
-	// Total halaman berdasarkan semua items yang sudah di-filter
 	const totalPages = $derived(Math.max(1, Math.ceil(items.length / PER_PAGE)));
-
-	// Slice items sesuai halaman aktif
 	const pagedItems = $derived(items.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE));
 
 	function handlePageChange(page: number) {
 		currentPage = page;
 	}
 
-	// Fungsi untuk menangani aksi Delete menggunakan fetch API ke Fastify
 	async function handleDeleteItem(id: number) {
-		// [PERBAIKAN] Ambil token dari localStorage
 		const token = localStorage.getItem('token');
 
 		const res = await fetch(`${env.PUBLIC_API_URL}/products/${id}`, {
 			method: 'DELETE',
-			// [PERBAIKAN] Sisipkan header Authorization
 			headers: token ? { Authorization: `Bearer ${token}` } : {}
 		});
 
 		if (res.ok) {
 			items = items.filter((item) => item.id !== id);
-			// Jika halaman sekarang jadi kosong setelah delete, mundur 1 halaman
 			if (currentPage > Math.ceil(items.length / PER_PAGE)) {
 				currentPage = Math.max(1, currentPage - 1);
 			}
@@ -65,7 +55,6 @@
 		goto(`/inventory/edit/${item.id}`);
 	}
 
-	// ==== STATE & HANDLER UNTUK FILTER BAR ====
 	let filterData = $state<InventoryFilter>({
 		search: '',
 		tab: 'all',
@@ -74,10 +63,9 @@
 		dateRange: null
 	});
 
-	// Ambil categories & warehouses dari data loader (real dari DB)
-	const categoriesList = $derived(
-		(data?.categories ?? []).map((c: { id: number; name: string }) => c.name)
-	);
+	const categoriesList = $derived([
+		...new Set((data?.categories ?? []).map((c: { id: number; name: string }) => c.name))
+	]);
 	const warehousesList = $derived(data?.warehouses ?? []);
 
 	const bulkActionsList: BulkActionOption[] = [
@@ -96,7 +84,6 @@
 			params.append('search', newFilter.search);
 		}
 
-		// Category: cari id berdasarkan nama yang dipilih
 		if (newFilter.category && newFilter.category !== 'all') {
 			const matched = (data?.categories ?? []).find(
 				(c: { id: number; name: string }) => c.name === newFilter.category
@@ -106,21 +93,16 @@
 			}
 		}
 
-		// Warehouse: kirim warehouseId langsung (sudah number)
 		if (newFilter.warehouseId != null) {
 			params.append('warehouseId', String(newFilter.warehouseId));
 		}
 
-		// Tab: kirim tab ke API (backend support low_stock filtering)
 		if (newFilter.tab && newFilter.tab !== 'all') {
 			params.append('tab', newFilter.tab);
 		}
 
 		try {
-			// [PERBAIKAN] Ambil token dari localStorage
 			const token = localStorage.getItem('token');
-
-			// [PERBAIKAN] Tambahkan header Authorization di sini
 			const res = await fetch(`${env.PUBLIC_API_URL}/products?${params.toString()}`, {
 				headers: token ? { Authorization: `Bearer ${token}` } : {}
 			});
@@ -128,7 +110,6 @@
 			if (res.ok) {
 				const responseData = (await res.json()) as InventoryListResponse;
 				items = responseData.data.map(toInventoryItem);
-				// Reset ke halaman 1 setiap kali filter berubah
 				currentPage = 1;
 				console.log('Data tabel berhasil diupdate sesuai filter!');
 			} else {
