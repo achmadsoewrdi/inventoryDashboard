@@ -11,6 +11,8 @@
 	} from 'lucide-svelte';
 	import { cn } from '$lib/utils/cn';
 	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
+	import { clearAuth } from '$lib/stores/auth';
 
 	interface NavItem {
 		label: string;
@@ -36,6 +38,11 @@
 	];
 
 	const isActive = (href: string) => currentPath === href;
+
+	function handleSignOut() {
+		clearAuth();
+		goto('/auth');
+	}
 </script>
 
 <aside
@@ -168,6 +175,7 @@
 
 		<button
 			type="button"
+			onclick={handleSignOut}
 			title={collapsed ? 'Sign Out' : undefined}
 			class={cn(
 				'group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-artisan-muted transition-all duration-150 hover:bg-red-50/80 hover:text-red-500',

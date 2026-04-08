@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import FilterBar from '$lib/components/global/FilterBar.svelte';
 	import InventoryTable from '$lib/components/features/Inventory/InventoryTable.svelte';
+	import Pagination from '$lib/components/global/Pagination.svelte';
 	import type {
 		InventoryItem,
 		InventoryFilter,
@@ -23,15 +24,40 @@
 		}
 	});
 
+	// ==== PAGINATION ====
+	const PER_PAGE = 5;
+	let currentPage = $state(1);
+
+	// Total halaman berdasarkan semua items yang sudah di-filter
+	const totalPages = $derived(Math.max(1, Math.ceil(items.length / PER_PAGE)));
+
+	// Slice items sesuai halaman aktif
+	const pagedItems = $derived(items.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE));
+
+	function handlePageChange(page: number) {
+		currentPage = page;
+	}
+
 	// Fungsi untuk menangani aksi Delete menggunakan fetch API ke Fastify
 	async function handleDeleteItem(id: number) {
+		// [PERBAIKAN] Ambil token dari localStorage
+		const token = localStorage.getItem('token');
+
 		const res = await fetch(`${env.PUBLIC_API_URL}/products/${id}`, {
-			method: 'DELETE'
+			method: 'DELETE',
+			// [PERBAIKAN] Sisipkan header Authorization
+			headers: token ? { Authorization: `Bearer ${token}` } : {}
 		});
 
 		if (res.ok) {
 			items = items.filter((item) => item.id !== id);
+			// Jika halaman sekarang jadi kosong setelah delete, mundur 1 halaman
+			if (currentPage > Math.ceil(items.length / PER_PAGE)) {
+				currentPage = Math.max(1, currentPage - 1);
+			}
 			console.log('Sip, data beneran kehapus dari DB!');
+		} else {
+			console.error('Gagal menghapus data. Status:', res.status);
 		}
 	}
 
@@ -91,11 +117,19 @@
 		}
 
 		try {
-			const res = await fetch(`${env.PUBLIC_API_URL}/products?${params.toString()}`);
+			// [PERBAIKAN] Ambil token dari localStorage
+			const token = localStorage.getItem('token');
+
+			// [PERBAIKAN] Tambahkan header Authorization di sini
+			const res = await fetch(`${env.PUBLIC_API_URL}/products?${params.toString()}`, {
+				headers: token ? { Authorization: `Bearer ${token}` } : {}
+			});
 
 			if (res.ok) {
 				const responseData = (await res.json()) as InventoryListResponse;
 				items = responseData.data.map(toInventoryItem);
+				// Reset ke halaman 1 setiap kali filter berubah
+				currentPage = 1;
 				console.log('Data tabel berhasil diupdate sesuai filter!');
 			} else {
 				console.error('Gagal mengambil data filter. Status:', res.status);
@@ -110,6 +144,7 @@
 			alert('Bulk delete belum dikonfigurasi ke endpoint API Fastify.');
 			items = items.filter((item) => !selectedItemIds.includes(item.id));
 			selectedItemIds = [];
+			currentPage = 1;
 		}
 	}
 
@@ -135,7 +170,7 @@
 	/>
 
 	<InventoryTable
-		{items}
+		items={pagedItems}
 		onEdit={handleEditItem}
 		onDelete={handleDeleteItem}
 		selectedIds={new Set(selectedItemIds)}
@@ -154,4 +189,14 @@
 			}
 		}}
 	/>
+
+	{#if items.length > PER_PAGE}
+		<Pagination
+			bind:currentPage
+			{totalPages}
+			totalItems={items.length}
+			perPage={PER_PAGE}
+			onPageChange={handlePageChange}
+		/>
+	{/if}
 </div>

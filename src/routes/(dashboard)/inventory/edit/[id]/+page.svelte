@@ -59,6 +59,9 @@
 		isSubmitting = true;
 
 		try {
+			// [PERBAIKAN 1] Ambil token dari localStorage sebelum melakukan fetch
+			const token = localStorage.getItem('token');
+
 			// Step 1: PUT /products/:id untuk update data produk
 			const body = {
 				name: name.trim(),
@@ -83,7 +86,11 @@
 
 			const updateRes = await fetch(`${env.PUBLIC_API_URL}/products/${product.id}`, {
 				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
+				headers: {
+					'Content-Type': 'application/json',
+					// [PERBAIKAN 2] Sisipkan header Authorization di sini
+					Authorization: token ? `Bearer ${token}` : ''
+				},
 				body: JSON.stringify(body)
 			});
 
@@ -94,7 +101,7 @@
 				);
 			}
 
-			// Step 2: Upload gambar baru jika ada (gambar yang sudah ada tidak diubah)
+			// Step 2: Upload gambar baru jika ada
 			for (let i = 0; i < images.length; i++) {
 				const formData = new FormData();
 				formData.append('file', images[i]);
@@ -102,6 +109,10 @@
 					`${env.PUBLIC_API_URL}/products/${product.id}/images?isPrimary=${product.images.length === 0 && i === 0}`,
 					{
 						method: 'POST',
+						// [PERBAIKAN 3] Jangan lupa sisipkan juga di upload gambar!
+						headers: {
+							Authorization: token ? `Bearer ${token}` : ''
+						},
 						body: formData
 					}
 				);

@@ -4,6 +4,7 @@
 
 	// props
 	interface props {
+		type?: 'button' | 'submit' | 'reset';
 		variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
 		size?: 'sm' | 'md' | 'lg';
 		disable?: boolean;
@@ -16,6 +17,7 @@
 	}
 
 	let {
+		type = 'button',
 		variant = 'primary',
 		size = 'md',
 		disable = false,
@@ -52,6 +54,7 @@
 </script>
 
 <button
+	{type}
 	class={cn(baseClasses, sizeClasses[size], variantClasses[variant], className)}
 	disabled={disable}
 	onclick={onClick}

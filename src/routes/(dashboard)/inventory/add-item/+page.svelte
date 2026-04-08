@@ -57,6 +57,9 @@
 		isSubmitting = true;
 
 		try {
+			// [PERBAIKAN] Ambil token dari localStorage
+			const token = localStorage.getItem('token');
+
 			const body = {
 				name: name.trim(),
 				sku: sku.trim(),
@@ -78,9 +81,13 @@
 					: {})
 			};
 
+			// [PERBAIKAN] Sisipkan header Authorization saat membuat produk
 			const createRes = await fetch(`${env.PUBLIC_API_URL}/products`, {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: token ? `Bearer ${token}` : ''
+				},
 				body: JSON.stringify(body)
 			});
 
@@ -95,8 +102,13 @@
 			for (let i = 0; i < images.length; i++) {
 				const formData = new FormData();
 				formData.append('file', images[i]);
+
+				// [PERBAIKAN] Sisipkan header Authorization saat mengunggah gambar
 				await fetch(`${env.PUBLIC_API_URL}/products/${productId}/images?isPrimary=${i === 0}`, {
 					method: 'POST',
+					headers: {
+						Authorization: token ? `Bearer ${token}` : ''
+					},
 					body: formData
 				});
 			}
@@ -116,7 +128,6 @@
 </svelte:head>
 
 <div class="flex flex-col gap-6">
-	<!-- ─── Page Header ─── -->
 	<div class="flex items-center justify-between">
 		<div class="flex items-center gap-3">
 			<a
@@ -157,7 +168,6 @@
 		</div>
 	</div>
 
-	<!-- ─── Alerts ─── -->
 	{#if submitError}
 		<div
 			class="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
@@ -183,14 +193,11 @@
 		</div>
 	{/if}
 
-	<!-- ─── Form Grid ─── -->
 	<div class="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_380px]">
-		<!-- Kolom Kiri -->
 		<div class="flex flex-col gap-5">
 			<BasicInformationForm bind:name bind:sku bind:description />
 			<ProductMediaUpload bind:images />
 
-			<!-- Category -->
 			<div class="rounded-xl border border-artisan-border bg-white p-6 shadow-sm">
 				<div class="mb-4 flex items-center gap-2">
 					<svg width="15" height="15" viewBox="0 0 24 24" fill="none" class="text-artisan-muted">
@@ -214,7 +221,7 @@
 						id="category"
 						bind:value={categoryId}
 						class="w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-artisan-dark transition outline-none focus:ring-2 focus:ring-artisan-active/20
-						{errors.categoryId
+                        {errors.categoryId
 							? 'border-red-300 ring-2 ring-red-100'
 							: 'border-artisan-border focus:border-artisan-muted'}"
 					>
@@ -230,7 +237,6 @@
 			</div>
 		</div>
 
-		<!-- Kolom Kanan (fixed width) -->
 		<div class="flex flex-col gap-5">
 			<ValueAndStock bind:basePrice bind:salePrice bind:currentStock bind:stockThreshold />
 			<WarehouseLogistics
@@ -243,7 +249,6 @@
 				<p class="-mt-3 px-1 text-xs text-red-500">{errors.supplierId}</p>
 			{/if}
 
-			<!-- ─── Save Card ─── -->
 			<div class="rounded-xl border border-artisan-border bg-white p-5 shadow-sm">
 				<p class="mb-3 text-xs text-artisan-muted">
 					Pastikan semua informasi sudah benar sebelum menyimpan. Data tidak bisa diubah setelah

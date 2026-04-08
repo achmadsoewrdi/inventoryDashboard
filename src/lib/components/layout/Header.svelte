@@ -11,7 +11,7 @@
 	let pageTittle = $derived(routeTittle[currentPath] || 'Dashboard');
 </script>
 
-<header class="flex items-center justify-between border-b border-artisan-border bg-white px-8 py-3">
+<header class="flex items-center justify-between border-b border-artisan-border bg-white px-8 py-5">
 	<h1 class="font-manrope text-xl font-bold text-artisan-dark">
 		{pageTittle}
 	</h1>
