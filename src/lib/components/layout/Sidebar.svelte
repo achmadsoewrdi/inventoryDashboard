@@ -72,9 +72,7 @@
 	<div class={cn('px-4 py-5', collapsed ? 'flex justify-center' : '')}>
 		{#if !collapsed}
 			<div class="flex flex-col gap-0.5">
-				<p class="text-[15px] font-extrabold tracking-[0.12em] text-artisan-dark uppercase">
-					Artisan Ops
-				</p>
+				<p class="text-[15px] font-extrabold text-artisan-dark uppercase">Inventory Dashboard</p>
 				<p class="text-[10px] font-semibold tracking-[0.2em] text-artisan-muted uppercase">
 					Admin Dashboard
 				</p>
@@ -83,7 +81,7 @@
 			<div
 				class="flex h-8 w-8 items-center justify-center rounded-lg bg-artisan-primary/10 text-artisan-primary"
 			>
-				<span class="text-xs font-black tracking-tight">AO</span>
+				<span class="text-xs font-black tracking-tight">AD</span>
 			</div>
 		{/if}
 	</div>

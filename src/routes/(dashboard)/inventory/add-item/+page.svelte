@@ -21,7 +21,8 @@
 	let name = $state('');
 	let sku = $state('');
 	let description = $state('');
-	let images = $state<CreateProductForm['images']>([]);
+	let newImages = $state<{ file: File; isPrimary: boolean }[]>([]);
+	let deletedImageIds = $state<number[]>([]);
 	let basePrice = $state(0);
 	let salePrice = $state(0);
 	let currentStock = $state(0);
@@ -99,18 +100,21 @@
 			const created = await createRes.json();
 			const productId: number = created.id;
 
-			for (let i = 0; i < images.length; i++) {
+			// ─── [PERBAIKAN] Gunakan newImages dan properti isPrimary bawaannya ───
+			for (const img of newImages) {
 				const formData = new FormData();
-				formData.append('file', images[i]);
+				formData.append('file', img.file); // Ambil file dari objek img
 
-				// [PERBAIKAN] Sisipkan header Authorization saat mengunggah gambar
-				await fetch(`${env.PUBLIC_API_URL}/products/${productId}/images?isPrimary=${i === 0}`, {
-					method: 'POST',
-					headers: {
-						Authorization: token ? `Bearer ${token}` : ''
-					},
-					body: formData
-				});
+				await fetch(
+					`${env.PUBLIC_API_URL}/products/${productId}/images?isPrimary=${img.isPrimary}`,
+					{
+						method: 'POST',
+						headers: {
+							Authorization: token ? `Bearer ${token}` : ''
+						},
+						body: formData
+					}
+				);
 			}
 
 			submitSuccess = true;
@@ -196,7 +200,7 @@
 	<div class="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_380px]">
 		<div class="flex flex-col gap-5">
 			<BasicInformationForm bind:name bind:sku bind:description />
-			<ProductMediaUpload bind:images />
+			<ProductMediaUpload bind:newImages bind:deletedImageIds />
 
 			<div class="rounded-xl border border-artisan-border bg-white p-6 shadow-sm">
 				<div class="mb-4 flex items-center gap-2">

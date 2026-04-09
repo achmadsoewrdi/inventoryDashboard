@@ -23,7 +23,8 @@
 	let name = $state(product.name);
 	let sku = $state(product.sku);
 	let description = $state(product.description ?? '');
-	let images = $state<CreateProductForm['images']>([]);
+	let newImages = $state<{ file: File; isPrimary: boolean }[]>([]);
+	let deletedImageIds = $state<number[]>([]);
 	let basePrice = $state(product.basePrice);
 	let salePrice = $state(product.salePrice);
 	let currentStock = $state(product.currentStock);
@@ -88,7 +89,6 @@
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
-					// [PERBAIKAN 2] Sisipkan header Authorization di sini
 					Authorization: token ? `Bearer ${token}` : ''
 				},
 				body: JSON.stringify(body)
@@ -101,21 +101,31 @@
 				);
 			}
 
-			// Step 2: Upload gambar baru jika ada
-			for (let i = 0; i < images.length; i++) {
+			// hapus gambar
+			for (const imageId of deletedImageIds) {
+				const delRes = await fetch(
+					`${env.PUBLIC_API_URL}/products/${product.id}/images/${imageId}`,
+					{
+						method: 'DELETE',
+						headers: { Authorization: token ? `Bearer ${token}` : '' }
+					}
+				);
+				if (!delRes.ok) console.warn(`Gagal menghapus gambar ID: ${imageId}`);
+			}
+
+			for (const img of newImages) {
 				const formData = new FormData();
-				formData.append('file', images[i]);
-				await fetch(
-					`${env.PUBLIC_API_URL}/products/${product.id}/images?isPrimary=${product.images.length === 0 && i === 0}`,
+				formData.append('file', img.file);
+
+				const uploadRes = await fetch(
+					`${env.PUBLIC_API_URL}/products/${product.id}/images?isPrimary=${img.isPrimary}`,
 					{
 						method: 'POST',
-						// [PERBAIKAN 3] Jangan lupa sisipkan juga di upload gambar!
-						headers: {
-							Authorization: token ? `Bearer ${token}` : ''
-						},
+						headers: { Authorization: token ? `Bearer ${token}` : '' },
 						body: formData
 					}
 				);
+				if (!uploadRes.ok) console.warn(`Gagal upload gambar baru: ${img.file.name}`);
 			}
 
 			submitSuccess = true;
@@ -208,7 +218,7 @@
 		<!-- Kolom Kiri -->
 		<div class="flex flex-col gap-5">
 			<BasicInformationForm bind:name bind:sku bind:description />
-			<ProductMediaUpload bind:images />
+			<ProductMediaUpload existingImages={product.images} bind:newImages bind:deletedImageIds />
 
 			<!-- Category -->
 			<div class="rounded-xl border border-artisan-border bg-white p-6 shadow-sm">

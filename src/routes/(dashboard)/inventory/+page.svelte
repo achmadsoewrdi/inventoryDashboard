@@ -126,11 +126,67 @@
 			items = items.filter((item) => !selectedItemIds.includes(item.id));
 			selectedItemIds = [];
 			currentPage = 1;
+		} else if (actionId === 'export') {
+			// Panggil fungsi handleExport yang baru saja kita buat!
+			handleExport();
 		}
 	}
 
-	function handleExport() {
-		console.log('Export data...');
+	async function handleExport() {
+		try {
+			const params = new SvelteURLSearchParams();
+
+			// 1. Masukkan filter yang sedang aktif
+			if (filterData.search) params.append('search', filterData.search);
+
+			if (filterData.category && filterData.category !== 'all') {
+				const matched = (data?.categories ?? []).find(
+					(c: { id: number; name: string }) => c.name === filterData.category
+				);
+				if (matched) params.append('categoryId', String(matched.id));
+			}
+
+			if (filterData.warehouseId != null) {
+				params.append('warehouseId', String(filterData.warehouseId));
+			}
+
+			if (filterData.tab && filterData.tab !== 'all') {
+				params.append('tab', filterData.tab);
+			}
+
+			// 2. Masukkan list ID jika ada yang dicentang (selectedItemIds)
+			selectedItemIds.forEach((id) => params.append('ids', String(id)));
+
+			const token = localStorage.getItem('token');
+
+			// 3. Panggil API Export
+			const res = await fetch(`${env.PUBLIC_API_URL}/products/export?${params.toString()}`, {
+				method: 'GET',
+				headers: token ? { Authorization: `Bearer ${token}` } : {}
+			});
+
+			if (!res.ok) throw new Error('Gagal mengekspor data');
+
+			// 4. Handle Blob untuk download file
+			const blob = await res.blob();
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+
+			// Nama file dinamis dengan timestamp
+			a.download = `inventory_export_${new Date().getTime()}.xlsx`;
+
+			document.body.appendChild(a);
+			a.click();
+
+			// Cleanup
+			window.URL.revokeObjectURL(url);
+			document.body.removeChild(a);
+
+			console.log('Export berhasil!');
+		} catch (error) {
+			console.error('Error saat export:', error);
+		}
 	}
 </script>
 
