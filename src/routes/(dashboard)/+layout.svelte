@@ -14,7 +14,7 @@
 			<Header />
 		{/if}
 
-		<main class="flex-1 overflow-y-auto p-8">
+		<main class="flex-1 overflow-y-auto p-6">
 			{@render children()}
 		</main>
 	</div>

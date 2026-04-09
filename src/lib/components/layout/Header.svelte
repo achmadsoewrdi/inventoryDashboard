@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { Bell } from 'lucide-svelte';
 
 	const routeTittle: Record<string, string> = {
 		'/': 'Admin Home',
@@ -15,9 +14,4 @@
 	<h1 class="font-manrope text-xl font-bold text-artisan-dark">
 		{pageTittle}
 	</h1>
-	<button
-		class="rounded-full p-2 text-artisan-muted transition-colors hover:bg-artisan-active/10 hover:text-artisan-dark focus:bg-artisan-active/10 focus:text-artisan-dark"
-	>
-		<Bell />
-	</button>
 </header>

@@ -137,37 +137,6 @@
 				{/each}
 			</select>
 
-			<!-- Updated Range -->
-			<div
-				class="flex h-9 items-center gap-1.5 rounded-lg border border-artisan-border bg-white px-3"
-			>
-				<svg
-					width="14"
-					height="14"
-					viewBox="0 0 16 16"
-					fill="none"
-					class="shrink-0 text-artisan-muted"
-				>
-					<rect
-						x="2"
-						y="3"
-						width="12"
-						height="11"
-						rx="2"
-						stroke="currentColor"
-						stroke-width="1.3"
-					/>
-					<path d="M2 6h12" stroke="currentColor" stroke-width="1.3" />
-					<path d="M5 2v2M11 2v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-				</svg>
-				<input
-					type="text"
-					placeholder="Updated Range"
-					readonly
-					class="w-28 bg-transparent text-sm text-artisan-dark outline-none placeholder:text-artisan-muted"
-				/>
-			</div>
-
 			<!-- Reset -->
 			<button
 				type="button"
