@@ -23,10 +23,10 @@
 <div class="flex h-screen items-center justify-center bg-artisan-bg p-4">
 	<!-- Card -->
 	<div
-		class="relative w-full max-w-[860px] overflow-hidden rounded-2xl border border-[#e0d9ce] bg-white shadow-[0_8px_32px_rgba(0,0,0,0.1)]"
-		style="height: clamp(480px, calc(100vh - 2rem), 560px);"
+		class="relative w-full max-w-[900px] overflow-hidden rounded-2xl border border-[#e0d9ce] bg-white shadow-[0_8px_32px_rgba(0,0,0,0.1)]"
+		style="height: clamp(480px, calc(100vh - 2rem), 640px);"
 	>
-		<!-- Login form: positioned on the RIGHT side (58% width, offset 42% from left) -->
+		<!-- Login form -->
 		<div
 			class="absolute top-0 left-[42%] z-0 flex h-full w-[58%] items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.65,0,0.35,1)]"
 			style="opacity: {isSignup ? '0' : '1'}; pointer-events: {isSignup ? 'none' : 'auto'};"
@@ -36,17 +36,17 @@
 			</div>
 		</div>
 
-		<!-- Signup form: positioned on the LEFT side (58% width, from left edge) -->
+		<!-- Signup form -->
 		<div
 			class="absolute top-0 left-0 z-0 flex h-full w-[58%] items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.65,0,0.35,1)]"
 			style="opacity: {isSignup ? '1' : '0'}; pointer-events: {isSignup ? 'auto' : 'none'};"
 		>
-			<div class="w-full max-w-[20rem] px-8">
+			<div class="w-full max-w-100 px-8">
 				<SignupForm onSwitchMode={switchToLogin} />
 			</div>
 		</div>
 
-		<!-- Panel overlay: 42% wide, slides between left (login) and right (signup) -->
+		<!-- Panel overlay -->
 		<div
 			class="absolute top-0 left-0 z-10 h-full w-[42%] transition-transform duration-700 ease-[cubic-bezier(0.65,0,0.35,1)] will-change-transform"
 			style="transform: translateX({isSignup ? 'calc(100% / 42 * 58)' : '0%'});"

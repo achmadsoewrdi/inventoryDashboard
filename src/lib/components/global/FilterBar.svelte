@@ -31,7 +31,7 @@
 	const tabs: { id: FilterTab; label: string }[] = [
 		{ id: 'all', label: 'All Items' },
 		{ id: 'low_stock', label: 'Low Stock' },
-		{ id: 'in_transit', label: 'In Transit' }
+		{ id: 'out', label: 'Out' }
 	];
 
 	let bulkOpen = $state(false);
@@ -138,8 +138,16 @@
 			</select>
 
 			<!-- Updated Range -->
-			<div class="flex h-9 items-center gap-1.5 rounded-lg border border-artisan-border bg-white px-3">
-				<svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="shrink-0 text-artisan-muted">
+			<div
+				class="flex h-9 items-center gap-1.5 rounded-lg border border-artisan-border bg-white px-3"
+			>
+				<svg
+					width="14"
+					height="14"
+					viewBox="0 0 16 16"
+					fill="none"
+					class="shrink-0 text-artisan-muted"
+				>
 					<rect
 						x="2"
 						y="3"

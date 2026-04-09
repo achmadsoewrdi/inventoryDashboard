@@ -12,35 +12,20 @@ export type StockStatus = 'IN_STOCK' | 'LOW_STOCK' | 'OUT_OF_STOCK';
 
 // Helper untuk display label di UI
 export const StockStatusLabel: Record<StockStatus, string> = {
-  IN_STOCK: 'IN STOCK',
-  LOW_STOCK: 'LOW STOCK',
-  OUT_OF_STOCK: 'OUT OF STOCK',
+	IN_STOCK: 'IN STOCK',
+	LOW_STOCK: 'LOW STOCK',
+	OUT_OF_STOCK: 'OUT OF STOCK'
 };
 
-export type SortField =
-  | 'name'
-  | 'sku'
-  | 'currentStock'
-  | 'updatedAt'
-  | 'supplier'
-  | 'location';
+export type SortField = 'name' | 'sku' | 'currentStock' | 'updatedAt' | 'supplier' | 'location';
 
 export type SortDirection = 'asc' | 'desc';
 
-export type FilterTab = 'all' | 'low_stock' | 'in_transit';
+export type FilterTab = 'all' | 'low_stock' | 'out';
 
-export type BulkAction =
-  | 'export'
-  | 'delete'
-  | 'reorder'
-  | 'update_location'
-  | 'assign_supplier';
+export type BulkAction = 'export' | 'delete' | 'reorder' | 'update_location' | 'assign_supplier';
 
-export type NavItem =
-  | 'admin_home'
-  | 'inventory_management'
-  | 'warehouse_map'
-  | 'supply_reports';
+export type NavItem = 'admin_home' | 'inventory_management' | 'warehouse_map' | 'supply_reports';
 
 export type NotificationType = 'info' | 'success' | 'warning' | 'error';
 
@@ -50,63 +35,63 @@ export type NotificationType = 'info' | 'success' | 'warning' | 'error';
 // ─────────────────────────────────────────
 
 export interface CategoryResponse {
-  id: number;
-  name: string;           // e.g. "CERAMICS"
-  subCategory: string;    // e.g. "HOME DECOR"
+	id: number;
+	name: string; // e.g. "CERAMICS"
+	subCategory: string; // e.g. "HOME DECOR"
 }
 
 export interface SupplierResponse {
-  id: number;
-  name: string;           // e.g. "Artisan Clayworks Co."
+	id: number;
+	name: string; // e.g. "Artisan Clayworks Co."
 }
 
 export interface WarehouseResponse {
-  id: number;
-  name: string;           // e.g. "North Warehouse"
+	id: number;
+	name: string; // e.g. "North Warehouse"
 }
 
 export interface ProductImageResponse {
-  id: number;
-  url: string;
-  isPrimary: boolean;
+	id: number;
+	url: string;
+	isPrimary: boolean;
 }
 
 export interface ProductLocationResponse {
-  aisle: string;          // e.g. "Aisle 4"
-  shelf: string;          // e.g. "Shelf B"
-  warehouse: WarehouseResponse;
+	aisle: string; // e.g. "Aisle 4"
+	shelf: string; // e.g. "Shelf B"
+	warehouse: WarehouseResponse;
 }
 
 // Shape lengkap dari GET /api/products/:id
 export interface InventoryItemResponse {
-  id: number;
-  name: string;
-  sku: string;
-  description: string | null;
-  basePrice: number;
-  salePrice: number;
-  currentStock: number;
-  stockThreshold: number;
-  status: StockStatus;
-  category: CategoryResponse;
-  supplier: SupplierResponse;
-  images: ProductImageResponse[];
-  location: ProductLocationResponse | null;
-  createdAt: string;
-  updatedAt: string;
+	id: number;
+	name: string;
+	sku: string;
+	description: string | null;
+	basePrice: number;
+	salePrice: number;
+	currentStock: number;
+	stockThreshold: number;
+	status: StockStatus;
+	category: CategoryResponse;
+	supplier: SupplierResponse;
+	images: ProductImageResponse[];
+	location: ProductLocationResponse | null;
+	createdAt: string;
+	updatedAt: string;
 }
 
 // Shape dari GET /api/products (list)
 export interface InventoryListResponse {
-  data: InventoryItemResponse[];
-  meta: PaginationMeta;
+	data: InventoryItemResponse[];
+	meta: PaginationMeta;
 }
 
 export interface PaginationMeta {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+	total: number;
+	page: number;
+	limit: number;
+	totalPages: number;
 }
 
 // ─────────────────────────────────────────
@@ -116,58 +101,60 @@ export interface PaginationMeta {
 // ─────────────────────────────────────────
 
 export interface InventoryItem {
-  id: number;
-  name: string;
-  category: string;         // dari category.name
-  subCategory: string;      // dari category.subCategory
-  sku: string;
-  currentStock: number;
-  stockThreshold: number;
-  status: StockStatus;
-  location: {
-    aisle: string;
-    shelf: string;
-    warehouse: string;      // dari location.warehouse.name
-    warehouseId: number;    // dari location.warehouse.id
-  } | null;
-  supplier: string;         // dari supplier.name
-  supplierId: number;       // dari supplier.id
-  imageUrl: string | null;  // dari images.find(isPrimary)?.url
-  updatedAt: string;        // formatted dari updatedAt
+	id: number;
+	name: string;
+	category: string; // dari category.name
+	subCategory: string; // dari category.subCategory
+	sku: string;
+	currentStock: number;
+	stockThreshold: number;
+	status: StockStatus;
+	location: {
+		aisle: string;
+		shelf: string;
+		warehouse: string; // dari location.warehouse.name
+		warehouseId: number; // dari location.warehouse.id
+	} | null;
+	supplier: string; // dari supplier.name
+	supplierId: number; // dari supplier.id
+	imageUrl: string | null; // dari images.find(isPrimary)?.url
+	updatedAt: string; // formatted dari updatedAt
 }
 
 // Transform helper: InventoryItemResponse → InventoryItem
 export function toInventoryItem(raw: InventoryItemResponse): InventoryItem {
-  const primaryImage = raw.images.find((img) => img.isPrimary) ?? raw.images[0];
+	const primaryImage = raw.images.find((img) => img.isPrimary) ?? raw.images[0];
 
-  return {
-    id: raw.id,
-    name: raw.name,
-    category: raw.category.name,
-    subCategory: raw.category.subCategory,
-    sku: raw.sku,
-    currentStock: raw.currentStock,
-    stockThreshold: raw.stockThreshold,
-    status: raw.status,
-    location: raw.location
-      ? {
-          aisle: raw.location.aisle,
-          shelf: raw.location.shelf,
-          warehouse: raw.location.warehouse.name,
-          warehouseId: raw.location.warehouse.id,
-        }
-      : null,
-    supplier: raw.supplier.name,
-    supplierId: raw.supplier.id,
-    imageUrl: primaryImage?.url 
-      ? (primaryImage.url.startsWith('http') ? primaryImage.url : `${env.PUBLIC_API_URL}${primaryImage.url}`) 
-      : null,
-    updatedAt: new Date(raw.updatedAt).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    }),
-  };
+	return {
+		id: raw.id,
+		name: raw.name,
+		category: raw.category.name,
+		subCategory: raw.category.subCategory,
+		sku: raw.sku,
+		currentStock: raw.currentStock,
+		stockThreshold: raw.stockThreshold,
+		status: raw.status,
+		location: raw.location
+			? {
+					aisle: raw.location.aisle,
+					shelf: raw.location.shelf,
+					warehouse: raw.location.warehouse.name,
+					warehouseId: raw.location.warehouse.id
+				}
+			: null,
+		supplier: raw.supplier.name,
+		supplierId: raw.supplier.id,
+		imageUrl: primaryImage?.url
+			? primaryImage.url.startsWith('http')
+				? primaryImage.url
+				: `${env.PUBLIC_API_URL}${primaryImage.url}`
+			: null,
+		updatedAt: new Date(raw.updatedAt).toLocaleDateString('en-US', {
+			month: 'short',
+			day: 'numeric',
+			year: 'numeric'
+		})
+	};
 }
 
 // ─────────────────────────────────────────
@@ -175,28 +162,28 @@ export function toInventoryItem(raw: InventoryItemResponse): InventoryItem {
 // ─────────────────────────────────────────
 
 export interface InventoryFilter {
-  tab: FilterTab;
-  category: string | null;
-  warehouseId: number | null;   // number, sesuai backend
-  dateRange: DateRange | null;
-  search: string;
+	tab: FilterTab;
+	category: string | null;
+	warehouseId: number | null; // number, sesuai backend
+	dateRange: DateRange | null;
+	search: string;
 }
 
 export interface DateRange {
-  from: Date | null;
-  to: Date | null;
+	from: Date | null;
+	to: Date | null;
 }
 
 export interface SortState {
-  field: SortField;
-  direction: SortDirection;
+	field: SortField;
+	direction: SortDirection;
 }
 
 export interface PaginationState {
-  currentPage: number;
-  perPage: number;
-  totalItems: number;
-  totalPages: number;
+	currentPage: number;
+	perPage: number;
+	totalItems: number;
+	totalPages: number;
 }
 
 // ─────────────────────────────────────────
@@ -204,20 +191,20 @@ export interface PaginationState {
 // ─────────────────────────────────────────
 
 export interface TableColumn {
-  key: SortField | 'itemDetail' | 'actions';
-  label: string;
-  sortable: boolean;
-  align?: 'left' | 'center' | 'right';
-  width?: string;
+	key: SortField | 'itemDetail' | 'actions';
+	label: string;
+	sortable: boolean;
+	align?: 'left' | 'center' | 'right';
+	width?: string;
 }
 
 export interface InventoryTableState {
-  items: InventoryItem[];
-  selectedIds: Set<number>;     // number, sesuai id dari backend
-  filter: InventoryFilter;
-  sort: SortState;
-  pagination: PaginationState;
-  isLoading: boolean;
+	items: InventoryItem[];
+	selectedIds: Set<number>; // number, sesuai id dari backend
+	filter: InventoryFilter;
+	sort: SortState;
+	pagination: PaginationState;
+	isLoading: boolean;
 }
 
 // ─────────────────────────────────────────
@@ -225,15 +212,15 @@ export interface InventoryTableState {
 // ─────────────────────────────────────────
 
 export interface RowAction {
-  id: 'view' | 'edit' | 'reorder';
-  label: string;
-  icon: string;
+	id: 'view' | 'edit' | 'reorder';
+	label: string;
+	icon: string;
 }
 
 export interface BulkActionOption {
-  id: BulkAction;
-  label: string;
-  destructive?: boolean;
+	id: BulkAction;
+	label: string;
+	destructive?: boolean;
 }
 
 // ─────────────────────────────────────────
@@ -241,10 +228,10 @@ export interface BulkActionOption {
 // ─────────────────────────────────────────
 
 export interface NavMenuItem {
-  id: NavItem;
-  label: string;
-  href: string;
-  icon: string;
+	id: NavItem;
+	label: string;
+	href: string;
+	icon: string;
 }
 
 // ─────────────────────────────────────────
@@ -252,13 +239,13 @@ export interface NavMenuItem {
 // ─────────────────────────────────────────
 
 export interface ApiResponse<T> {
-  data: T;
-  success: boolean;
-  message?: string;
+	data: T;
+	success: boolean;
+	message?: string;
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  pagination: PaginationState;
+	pagination: PaginationState;
 }
 
 // ─────────────────────────────────────────
@@ -266,11 +253,11 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 // ─────────────────────────────────────────
 
 export interface Notification {
-  id: string;
-  type: NotificationType;
-  message: string;
-  read: boolean;
-  createdAt: Date;
+	id: string;
+	type: NotificationType;
+	message: string;
+	read: boolean;
+	createdAt: Date;
 }
 
 // ─────────────────────────────────────────
@@ -278,27 +265,27 @@ export interface Notification {
 // ─────────────────────────────────────────
 
 export interface OverviewStats {
-  totalInventoryValue: number;
-  lowStockItems: number;
-  recentActivity: ActivityLog[];
-  warehouseZones: WarehouseZone[];
+	totalInventoryValue: number;
+	lowStockItems: number;
+	recentActivity: ActivityLog[];
+	warehouseZones: WarehouseZone[];
 }
 
 export interface ActivityLog {
-  id: number;
-  description: string;
-  delta: number | null;
-  status: string | null;
-  createdAt: string;
-  user: { id: number; name: string; avatar: string | null } | null;
-  product: { id: number; name: string; sku: string } | null;
+	id: number;
+	description: string;
+	delta: number | null;
+	status: string | null;
+	createdAt: string;
+	user: { id: number; name: string; avatar: string | null } | null;
+	product: { id: number; name: string; sku: string } | null;
 }
 
 export interface WarehouseZone {
-  id: number;
-  name: string;           // e.g. "Zone A (Ceramics)"
-  percentage: number;
-  warehouse: WarehouseResponse;
+	id: number;
+	name: string; // e.g. "Zone A (Ceramics)"
+	percentage: number;
+	warehouse: WarehouseResponse;
 }
 
 // ─────────────────────────────────────────
@@ -306,25 +293,25 @@ export interface WarehouseZone {
 // ─────────────────────────────────────────
 
 export interface CreateProductForm {
-  // Basic Information
-  name: string;
-  sku: string;
-  description: string;
+	// Basic Information
+	name: string;
+	sku: string;
+	description: string;
 
-  // Value & Stock
-  basePrice: number;
-  salePrice: number;
-  currentStock: number;
-  stockThreshold: number;
+	// Value & Stock
+	basePrice: number;
+	salePrice: number;
+	currentStock: number;
+	stockThreshold: number;
 
-  // Warehouse Logistics
-  supplierId: number | null;
-  location: {
-    warehouseId: number | null;
-    aisle: string;
-    shelf: string;
-  };
+	// Warehouse Logistics
+	supplierId: number | null;
+	location: {
+		warehouseId: number | null;
+		aisle: string;
+		shelf: string;
+	};
 
-  // Media
-  images: File[];
+	// Media
+	images: File[];
 }
