@@ -315,3 +315,40 @@ export interface CreateProductForm {
 	// Media
 	images: File[];
 }
+
+// ─────────────────────────────────────────
+// PRODUCT DETAIL
+// ─────────────────────────────────────────
+
+export interface ProductDetail {
+	id: number;
+	name: string;
+	sku: string;
+	description?: string | null;
+	basePrice: number;
+	salePrice?: number | null;
+	currentStock: number;
+	stockThreshold: number;
+	status: StockStatus;
+	category?: {
+		id: number;
+		name: string;
+		subCategory: string;
+	} | null;
+	supplier?: {
+		id: number;
+		name: string;
+	} | null;
+	location?: {
+		aisle: string;
+		shelf: string;
+		warehouse?: {
+			name: string;
+		};
+	} | null;
+	images?: {
+		id: number;
+		url: string;
+		isPrimary: boolean;
+	}[];
+}
