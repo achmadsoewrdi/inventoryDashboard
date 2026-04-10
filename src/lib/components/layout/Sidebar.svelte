@@ -1,14 +1,5 @@
 <script lang="ts">
-	import {
-		LayoutDashboard,
-		Package,
-		Map,
-		FileBarChart2,
-		User,
-		LogOut,
-		ChevronLeft,
-		type Icon
-	} from 'lucide-svelte';
+	import { LayoutDashboard, Package, User, LogOut, ChevronLeft, type Icon } from 'lucide-svelte';
 	import { cn } from '$lib/utils/cn';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
@@ -31,9 +22,7 @@
 	let collapsed = $state(false);
 	const navItems: NavItem[] = [
 		{ label: 'Admin Home', href: '/', icon: LayoutDashboard },
-		{ label: 'Inventory Management', href: '/inventory', icon: Package },
-		{ label: 'Warehouse Map', href: '/warehouse', icon: Map },
-		{ label: 'Supply Reports', href: '/reports', icon: FileBarChart2 }
+		{ label: 'Inventory', href: '/inventory', icon: Package }
 	];
 	const isActive = (href: string) => currentPath === href;
 
