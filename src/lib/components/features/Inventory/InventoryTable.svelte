@@ -6,6 +6,7 @@
 	interface Props {
 		items: InventoryItem[];
 		selectedIds: Set<number>;
+		isAdmin: boolean; // [Gunakan ini sebagai gatekeeper]
 		onSelectAll: (checked: boolean) => void;
 		onToggleSelection: (id: number) => void;
 		onView?: (item: InventoryItem) => void;
@@ -16,6 +17,7 @@
 	let {
 		items = [],
 		selectedIds,
+		isAdmin = false,
 		onSelectAll,
 		onToggleSelection,
 		onView,
@@ -58,6 +60,7 @@
 					{#each items as item (item.id)}
 						<InventoryTableRow
 							{item}
+							{isAdmin}
 							selected={selectedIds.has(item.id)}
 							{onToggleSelection}
 							{onView}

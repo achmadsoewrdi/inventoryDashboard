@@ -1,12 +1,18 @@
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { browser } from '$app/environment';
 
-export const authStore = writable<{
+interface AuthState {
 	token: string | null;
 	user: { id: number; name: string; role: string } | null;
-}>({
+}
+
+export const authStore = writable<AuthState>({
 	token: null,
 	user: null
+});
+
+export const isAdmin = derived(authStore, ($authStore) => {
+	return $authStore.user?.role === 'ADMIN';
 });
 
 export function setAuth(token: string, user: { id: number; name: string; role: string }) {

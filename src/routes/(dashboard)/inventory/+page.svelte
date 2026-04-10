@@ -13,6 +13,7 @@
 	} from '$lib/types/types';
 	import { toInventoryItem } from '$lib/types/types';
 	import { env } from '$env/dynamic/public';
+	import { isAdmin } from '$lib/stores/auth';
 
 	// Data Initialization
 	let { data } = $props();
@@ -48,10 +49,14 @@
 	]);
 	const warehousesList = $derived(data?.warehouses ?? []);
 
-	const bulkActionsList: BulkActionOption[] = [
-		{ id: 'delete', label: 'Delete Selected', destructive: true },
-		{ id: 'export', label: 'Export Selected' }
-	];
+	const bulkActionsList = $derived<BulkActionOption[]>(
+		$isAdmin
+			? [
+					{ id: 'delete', label: 'Delete Selected', destructive: true },
+					{ id: 'export', label: 'Export Selected' }
+				]
+			: [{ id: 'export', label: 'Export Selected' }]
+	);
 
 	let selectedItemIds = $state<number[]>([]);
 	let countSelected = $derived(selectedItemIds.length);
@@ -207,6 +212,7 @@
 
 	<InventoryTable
 		items={pagedItems}
+		isAdmin={$isAdmin}
 		onView={handleViewItem}
 		onEdit={handleEditItem}
 		onDelete={handleDeleteClick}

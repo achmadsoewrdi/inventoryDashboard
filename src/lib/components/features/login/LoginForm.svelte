@@ -31,6 +31,7 @@
 
 		if (res.ok) {
 			setAuth(data.token, data.user);
+			localStorage.setItem('userRole', data.user.role);
 			goto('/');
 		} else {
 			errorMsg = data.message ?? 'Email atau password salah';

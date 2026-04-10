@@ -13,6 +13,7 @@
 	interface Props {
 		item: InventoryItem;
 		selected?: boolean;
+		isAdmin: boolean; // [TAMBAHKAN INI] Agar sinkron dengan parent
 		onToggleSelection?: (id: number) => void;
 		onView?: (item: InventoryItem) => void;
 		onEdit?: (item: InventoryItem) => void;
@@ -20,7 +21,16 @@
 		onHistory?: (item: InventoryItem) => void;
 	}
 
-	let { item, selected = false, onToggleSelection, onView, onEdit, onDelete }: Props = $props();
+	// [TAMBAHKAN isAdmin] di destructuring props
+	let {
+		item,
+		selected = false,
+		isAdmin = false,
+		onToggleSelection,
+		onView,
+		onEdit,
+		onDelete
+	}: Props = $props();
 
 	let menuOpen = $derived(activeItemId === item.id);
 	let btnEl = $state<HTMLButtonElement | null>(null);
@@ -34,24 +44,21 @@
 		e.stopPropagation();
 
 		if (activeItemId === item.id) {
-			// Tutup menu jika sudah terbuka
 			activeItemId = null;
 		} else {
-			// Hitung posisi button relatif ke viewport
 			if (btnEl) {
 				const rect = btnEl.getBoundingClientRect();
 				menuPos = {
 					top: rect.bottom + window.scrollY + 4,
-					left: rect.right + window.scrollX - 160 // 160 = lebar menu (w-40)
+					left: rect.right + window.scrollX - 160
 				};
 			}
-			// Set ke ID ini — otomatis menutup menu row lain
 			activeItemId = item.id;
 		}
 	}
 
 	function handleAction(fn?: () => void) {
-		menuOpen = false;
+		activeItemId = null; // Tutup menu setelah aksi dipilih
 		fn?.();
 	}
 
@@ -64,7 +71,6 @@
 
 <svelte:window onclick={handleOutsideClick} />
 
-<!-- Dropdown dirender di luar table pakai fixed position via style -->
 {#if menuOpen}
 	<div
 		role="menu"
@@ -89,26 +95,26 @@
 			Edit
 		</button>
 
-		<div class="mx-3 border-t border-artisan-border"></div>
+		{#if isAdmin}
+			<div class="mx-3 border-t border-artisan-border"></div>
 
-		<button
-			type="button"
-			onclick={() => handleAction(() => onDelete?.(item))}
-			class="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-red-500 transition-colors hover:bg-red-50"
-		>
-			<Trash2 size={14} />
-			Delete
-		</button>
+			<button
+				type="button"
+				onclick={() => handleAction(() => onDelete?.(item))}
+				class="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm text-red-500 transition-colors hover:bg-red-50"
+			>
+				<Trash2 size={14} />
+				Delete
+			</button>
+		{/if}
 	</div>
 {/if}
 
 <tr class="border-b border-artisan-border/50 transition-colors last:border-b-0 hover:bg-artisan-bg">
-	<!-- Checkbox -->
 	<td class="w-12 p-4 text-center">
 		<Chekbox checked={selected} onChange={handleSelection} />
 	</td>
 
-	<!-- Product Info -->
 	<td class="p-4">
 		<div class="flex items-center gap-3">
 			{#if item.imageUrl}
@@ -132,11 +138,12 @@
 						stroke-linecap="round"
 						stroke-linejoin="round"
 						class="opacity-50"
+						><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle
+							cx="9"
+							cy="9"
+							r="2"
+						/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg
 					>
-						<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-						<circle cx="9" cy="9" r="2" />
-						<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-					</svg>
 				</div>
 			{/if}
 			<div>
@@ -145,18 +152,13 @@
 		</div>
 	</td>
 
-	<!-- SKU -->
-	<td class="p-4 text-sm text-artisan-muted">
-		{item.sku}
-	</td>
+	<td class="p-4 text-sm text-artisan-muted">{item.sku}</td>
 
-	<!-- Category -->
 	<td class="p-4 text-sm text-artisan-dark">
 		<div>{item.category}</div>
 		<div class="text-xs text-artisan-muted">{item.subCategory}</div>
 	</td>
 
-	<!-- Stock -->
 	<td class="p-4">
 		<div class="flex items-center gap-2">
 			<span class="text-sm font-medium text-artisan-dark">{item.currentStock}</span>
@@ -164,12 +166,10 @@
 		</div>
 	</td>
 
-	<!-- Status -->
 	<td class="p-4">
 		<Badge status={item.status} />
 	</td>
 
-	<!-- Actions -->
 	<td class="p-4 text-center">
 		<button
 			bind:this={btnEl}

@@ -12,6 +12,7 @@
 	import LogisticsCard from '$lib/components/features/detailProduct/LogisticsCard.svelte';
 	import AlertOverlay from '$lib/components/global/AlertOverlay.svelte';
 	import RestockOverlay from '$lib/components/global/RestockOverlay.svelte';
+	import { isAdmin } from '$lib/stores/auth';
 
 	// 1. Data Initialization
 	let { data } = $props();
@@ -132,32 +133,36 @@
 			<BasicInfoCard {product} />
 			<LogisticsCard {product} />
 
-			<div class="rounded-xl border border-red-100 bg-red-50/30 p-5">
-				<h3 class="mb-3 text-sm font-bold tracking-wider text-red-600 uppercase">Danger Zone</h3>
-				<p class="mb-4 text-xs text-red-500/80">
-					Menghapus produk ini akan menghilangkan seluruh data stok dan log aktivitas selamanya.
-				</p>
-				<button
-					onclick={() => (isDeleteModalOpen = true)}
-					class="text-sm font-semibold text-red-600 underline underline-offset-4 hover:text-red-700"
-				>
-					Hapus Produk Secara Permanen
-				</button>
-			</div>
+			{#if $isAdmin}
+				<div class="rounded-xl border border-red-100 bg-red-50/30 p-5">
+					<h3 class="mb-3 text-sm font-bold tracking-wider text-red-600 uppercase">Danger Zone</h3>
+					<p class="mb-4 text-xs text-red-500/80">
+						Menghapus produk ini akan menghilangkan seluruh data stok dan log aktivitas selamanya.
+					</p>
+					<button
+						onclick={() => (isDeleteModalOpen = true)}
+						class="text-sm font-semibold text-red-600 underline underline-offset-4 hover:text-red-700"
+					>
+						Hapus Produk Secara Permanen
+					</button>
+				</div>
+			{/if}
 		</div>
 	</div>
 
-	<AlertOverlay
-		isOpen={isDeleteModalOpen}
-		title="Hapus Produk?"
-		message={`Apakah Anda yakin ingin menghapus "${product.name}" secara permanen? Data yang dihapus tidak dapat dikembalikan.`}
-		type="danger"
-		confirmText="Ya, Hapus"
-		cancelText="Batal"
-		isLoading={isDeleting}
-		onConfirm={handleDelete}
-		onCancel={() => (isDeleteModalOpen = false)}
-	/>
+	{#if $isAdmin}
+		<AlertOverlay
+			isOpen={isDeleteModalOpen}
+			title="Hapus Produk?"
+			message={`Apakah Anda yakin ingin menghapus "${product.name}" secara permanen? Data yang dihapus tidak dapat dikembalikan.`}
+			type="danger"
+			confirmText="Ya, Hapus"
+			cancelText="Batal"
+			isLoading={isDeleting}
+			onConfirm={handleDelete}
+			onCancel={() => (isDeleteModalOpen = false)}
+		/>
+	{/if}
 
 	<RestockOverlay
 		isOpen={isRestockModalOpen}
