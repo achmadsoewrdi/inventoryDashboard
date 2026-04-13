@@ -26,7 +26,6 @@
 
 <div class="-p-6">
 	<h1 class="mb-6 text-2xl font-bold text-artisan-dark">Inventory Overview</h1>
-
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each stats as stat (stat.title)}
 			<StatCard title={stat.title} value={stat.value} Icon={stat.icon} trend={stat.trend} />
